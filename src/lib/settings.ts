@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+﻿import { supabase } from '@/lib/supabase';
 
 export interface BusinessSettings {
   name: string;
@@ -51,7 +51,7 @@ export async function getFees(): Promise<FeeSettings> {
 
 export async function getBusiness(): Promise<BusinessSettings> {
   const biz = await getSettings<BusinessSettings>('business');
-  return biz || { name: 'octafkreasi', description: '', email: '', whatsapp: '', address: '' };
+  return biz || { name: 'Octaf Kreasi', description: '', email: '', whatsapp: '', address: '' };
 }
 
 export async function getActiveBanks(): Promise<BankAccount[]> {

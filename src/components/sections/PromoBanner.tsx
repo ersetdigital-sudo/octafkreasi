@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 
 // =============================================================================
@@ -48,7 +48,7 @@ function WhyChooseUs() {
       <div className="container-app">
         <div className="mb-10 text-center">
           <h2 className="font-heading text-3xl font-bold text-gray-900">
-            Kenapa Memilih octafkreasi?
+            Kenapa Memilih Octaf Kreasi?
           </h2>
           <p className="mt-3 text-gray-500">
             Kami berkomitmen memberikan pengalaman perjalanan terbaik untuk Anda
@@ -99,7 +99,7 @@ function FlashSaleBanner() {
                 500+ Destinasi Terbaik Indonesia
               </h3>
               <p className="mt-2 text-lg text-white/80">
-                Dari Raja Ampat sampai Labuan Bajo, semua bisa kamu jelajahi bersama octafkreasi
+                Dari Raja Ampat sampai Labuan Bajo, semua bisa kamu jelajahi bersama Octaf Kreasi
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <div className="flex items-center gap-2">
@@ -157,7 +157,7 @@ function Testimonials() {
     },
     {
       id: 'test-3',
-      content: 'Liburan keluarga yang sempurna berkat octafkreasi. Anak-anak senang, orang tua tenang. Pasti repeat order!',
+      content: 'Liburan keluarga yang sempurna berkat Octaf Kreasi. Anak-anak senang, orang tua tenang. Pasti repeat order!',
       author: 'Budi S.',
       city: 'Bandung',
       rating: 5,

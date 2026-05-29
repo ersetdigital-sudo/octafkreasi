@@ -1,4 +1,4 @@
-// Booking state that persists across pages via sessionStorage
+﻿// Booking state that persists across pages via sessionStorage
 
 export interface BookingState {
   destinationName: string;

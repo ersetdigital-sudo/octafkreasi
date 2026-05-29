@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
@@ -187,7 +187,7 @@ function QRCode({ value, size = 100 }: { value: string; size?: number }) {
   return <img src={qrUrl} alt="QR Code" width={size} height={size} className="rounded-lg" />;
 }
 
-function OctafkreasiLogo({ className = '', white = false }: { className?: string; white?: boolean }) {
+function OctafKreasiLogo({ className = '', white = false }: { className?: string; white?: boolean }) {
   return (
     <svg className={className} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="32" height="32" rx="8" fill={white ? 'rgba(255,255,255,0.15)' : 'url(#logoGrad)'} />
@@ -256,9 +256,9 @@ function TicketDetail({ ticket, onClose }: { ticket: Ticket; onClose: () => void
             {/* Logo + Status */}
             <div className="relative flex items-start justify-between">
               <div className="flex items-center gap-2.5">
-                <OctafkreasiLogo className="h-9 w-9" white />
+                <OctafKreasiLogo className="h-9 w-9" white />
                 <div>
-                  <h2 className="text-base font-bold tracking-tight text-white">octafkreasi</h2>
+                  <h2 className="text-base font-bold tracking-tight text-white">Octaf Kreasi</h2>
                   <p className="text-[10px] font-medium tracking-wide text-blue-300/80 uppercase">Travel E-Ticket</p>
                 </div>
               </div>
@@ -398,7 +398,7 @@ function TicketDetail({ ticket, onClose }: { ticket: Ticket; onClose: () => void
           {/* === FOOTER — Clean & Minimal === */}
           <div className="border-t border-slate-100 bg-slate-50/50 px-6 py-4 text-center">
             <p className="text-[10px] font-medium tracking-wide text-slate-400">
-              Official Travel E-Ticket · Powered by Octafkreasi
+              Official Travel E-Ticket · Powered by Octaf Kreasi
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { formatRupiah } from '@/lib/format';
 import { setBookingState } from '@/lib/booking-store';
 import { useAuth } from '@/lib/auth-context';
 import { addToWishlist, removeFromWishlist, isInWishlist } from '@/lib/wishlist';
+import { supabase } from '@/lib/supabase';
 import type { Review } from '@/types';
 
 export interface BookingCardProps {
@@ -23,6 +24,17 @@ export interface BookingCardProps {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function BookingCard({ price, destinationSlug, destinationName, rating, reviewCount, duration }: BookingCardProps) {
   const router = useRouter();
+  const [waNumber, setWaNumber] = useState('');
+
+  useEffect(() => {
+    supabase.from('settings').select('value').eq('id', 'business').single()
+      .then(({ data }) => {
+        if (data?.value) {
+          const val = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+          if (val.whatsapp) setWaNumber(val.whatsapp);
+        }
+      });
+  }, []);
   const { user } = useAuth();
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -132,7 +144,7 @@ export function BookingCard({ price, destinationSlug, destinationName, rating, r
           <svg className="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
           </svg>
-          <span className="text-sm font-semibold text-gray-800">{rating}</span>
+          <span className="text-sm font-semibold text-gray-800">{rating.toFixed(1)}</span>
           <span className="text-xs text-gray-500">({reviewCount} reviews)</span>
         </div>
 
@@ -250,15 +262,17 @@ export function BookingCard({ price, destinationSlug, destinationName, rating, r
               'Pesan Sekarang'
             )}
           </button>
-          <button
-            type="button"
+          <a
+            href={`https://wa.me/${waNumber.replace(/\D/g, '')}?text=${encodeURIComponent(`Halo, saya tertarik dengan destinasi ${destinationName}, boleh konsultasi lebih lanjut?`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary py-3 text-sm font-bold text-primary transition-colors hover:bg-primary-50"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
             </svg>
             Chat Konsultasi
-          </button>
+          </a>
         </div>
 
       </div>

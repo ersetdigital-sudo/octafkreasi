@@ -1,4 +1,4 @@
-import type { PaymentMethodGroup } from '@/types';
+﻿import type { PaymentMethodGroup } from '@/types';
 
 // =============================================================================
 // Payment Method Groups
@@ -15,13 +15,13 @@ export const paymentMethods: PaymentMethodGroup[] = [
         name: 'BCA',
         logo: '/images/payment/bca.png',
         accountNumber: '1234 5678 9101',
-        accountName: 'PT octafkreasi Travel',
+        accountName: 'PT Octaf Kreasi Travel',
         instructions: [
           'Login ke BCA Mobile atau KlikBCA',
           'Pilih menu Transfer',
           'Masukkan nomor rekening: 1234 5678 9101',
           'Masukkan jumlah transfer sesuai total pembayaran',
-          'Pastikan nama penerima: PT octafkreasi Travel',
+          'Pastikan nama penerima: PT Octaf Kreasi Travel',
           'Konfirmasi dan selesaikan transfer',
           'Simpan bukti pembayaran dan unggah di halaman konfirmasi',
         ],
@@ -32,13 +32,13 @@ export const paymentMethods: PaymentMethodGroup[] = [
         name: 'Mandiri',
         logo: '/images/payment/mandiri.png',
         accountNumber: '1234 5678 9101',
-        accountName: 'PT octafkreasi Travel',
+        accountName: 'PT Octaf Kreasi Travel',
         instructions: [
           'Login ke Livin by Mandiri atau Internet Banking',
           'Pilih menu Transfer',
           'Masukkan nomor rekening tujuan',
           'Masukkan jumlah transfer sesuai total pembayaran',
-          'Pastikan nama penerima: PT octafkreasi Travel',
+          'Pastikan nama penerima: PT Octaf Kreasi Travel',
           'Konfirmasi dan selesaikan transfer',
           'Simpan bukti pembayaran dan unggah di halaman konfirmasi',
         ],
@@ -49,13 +49,13 @@ export const paymentMethods: PaymentMethodGroup[] = [
         name: 'BNI',
         logo: '/images/payment/bni.png',
         accountNumber: '1234 5678 9101',
-        accountName: 'PT octafkreasi Travel',
+        accountName: 'PT Octaf Kreasi Travel',
         instructions: [
           'Login ke BNI Mobile Banking atau Internet Banking',
           'Pilih menu Transfer',
           'Masukkan nomor rekening tujuan',
           'Masukkan jumlah transfer sesuai total pembayaran',
-          'Pastikan nama penerima: PT octafkreasi Travel',
+          'Pastikan nama penerima: PT Octaf Kreasi Travel',
           'Konfirmasi dan selesaikan transfer',
           'Simpan bukti pembayaran dan unggah di halaman konfirmasi',
         ],
@@ -66,13 +66,13 @@ export const paymentMethods: PaymentMethodGroup[] = [
         name: 'BRI',
         logo: '/images/payment/bri.png',
         accountNumber: '1234 5678 9101',
-        accountName: 'PT octafkreasi Travel',
+        accountName: 'PT Octaf Kreasi Travel',
         instructions: [
           'Login ke BRImo atau Internet Banking BRI',
           'Pilih menu Transfer',
           'Masukkan nomor rekening tujuan',
           'Masukkan jumlah transfer sesuai total pembayaran',
-          'Pastikan nama penerima: PT octafkreasi Travel',
+          'Pastikan nama penerima: PT Octaf Kreasi Travel',
           'Konfirmasi dan selesaikan transfer',
           'Simpan bukti pembayaran dan unggah di halaman konfirmasi',
         ],

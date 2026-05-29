@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octaf Kreasi — Presentasi Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#f8fafc}
+.slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;overflow:hidden;page-break-after:always}
+.slide::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(37,99,255,0.15),transparent);border-radius:50%}
+.slide::after{content:'';position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(99,102,241,0.1),transparent);border-radius:50%}
+.slide>*{position:relative;z-index:1}
+h1{font-size:3.5rem;font-weight:800;line-height:1.1;background:linear-gradient(135deg,#3b82f6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:2.2rem;font-weight:700;color:#f1f5f9;margin-bottom:30px}
+h3{font-size:1.1rem;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
+p{font-size:1.1rem;line-height:1.7;color:#94a3b8}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,255,0.15);border:1px solid rgba(37,99,255,0.3);border-radius:100px;padding:6px 16px;font-size:0.8rem;font-weight:600;color:#60a5fa;margin-bottom:20px}
+.badge::before{content:'';width:6px;height:6px;background:#3b82f6;border-radius:50%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:30px}
+.card{background:rgba(30,41,59,0.8);border:1px solid rgba(148,163,184,0.1);border-radius:16px;padding:28px}
+.card h4{font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:8px}
+.card p{font-size:0.85rem;color:#64748b;line-height:1.6}
+.card .icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:1.2rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:30px}
+.stat{text-align:center;padding:30px 20px;background:rgba(30,41,59,0.6);border:1px solid rgba(148,163,184,0.08);border-radius:16px}
+.stat .num{font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#3b82f6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat .label{font-size:0.8rem;color:#64748b;margin-top:8px;text-transform:uppercase;letter-spacing:0.05em}
+.tech-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.tech-tag{background:rgba(30,41,59,0.8);border:1px solid rgba(148,163,184,0.15);border-radius:10px;padding:10px 18px;font-size:0.85rem;font-weight:600;color:#cbd5e1}
+.list{list-style:none;margin-top:20px}
+.list li{padding:12px 0;border-bottom:1px solid rgba(148,163,184,0.08);font-size:0.95rem;color:#cbd5e1;display:flex;align-items:center;gap:12px}
+.list li::before{content:'✓';width:24px;height:24px;background:rgba(34,197,94,0.15);color:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0}
+.url{font-family:monospace;background:rgba(37,99,255,0.1);border:1px solid rgba(37,99,255,0.2);border-radius:8px;padding:4px 12px;color:#60a5fa;font-size:0.9rem}
+@media print{.slide{padding:40px} body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}}
+@media(max-width:768px){.slide{padding:30px 20px}h1{font-size:2.2rem}h2{font-size:1.6rem}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="slide" style="justify-content:center;align-items:center;text-align:center">
+<div class="badge">Platform Tour & Travel</div>
+<h1 style="font-size:4rem">Octaf Kreasi</h1>
+<p style="margin-top:20px;font-size:1.3rem;max-width:600px">Platform booking perjalanan wisata Indonesia yang modern, premium, dan siap digunakan.</p>
+<p style="margin-top:40px"><span class="url">www.octafkreasi.com</span></p>
+</div>
+
+<div class="slide">
+<h3>Overview</h3>
+<h2>Apa itu Octaf Kreasi?</h2>
+<p style="max-width:700px">Platform lengkap untuk mengelola bisnis tour & travel — dari booking customer, manajemen pesanan, e-tiket digital, hingga notifikasi WhatsApp otomatis. Semua dalam satu dashboard.</p>
+<div class="stats">
+<div class="stat"><div class="num">12</div><div class="label">Tabel Database</div></div>
+<div class="stat"><div class="num">20+</div><div class="label">Halaman</div></div>
+<div class="stat"><div class="num">100%</div><div class="label">Responsive</div></div>
+<div class="stat"><div class="num">∞</div><div class="label">Scalable</div></div>
+</div>
+</div>
+
+<div class="slide">
+<h3>Customer Experience</h3>
+<h2>Fitur untuk Traveler</h2>
+<div class="grid">
+<div class="card"><div class="icon" style="background:rgba(37,99,255,0.15)">🌍</div><h4>Jelajahi Destinasi</h4><p>Browse destinasi dengan foto, harga, rating, dan ulasan real.</p></div>
+<div class="card"><div class="icon" style="background:rgba(34,197,94,0.15)">📋</div><h4>Booking Multi-Step</h4><p>Checkout mudah: auto-fill, peserta, add-ons, promo code.</p></div>
+<div class="card"><div class="icon" style="background:rgba(168,85,247,0.15)">🎫</div><h4>E-Tiket Digital</h4><p>QR Code, download PNG, scan check-in di lokasi.</p></div>
+<div class="card"><div class="icon" style="background:rgba(234,179,8,0.15)">⭐</div><h4>Ulasan & Rating</h4><p>Rating bintang interaktif, moderasi admin, badge verified.</p></div>
+<div class="card"><div class="icon" style="background:rgba(239,68,68,0.15)">❤️</div><h4>Wishlist</h4><p>Simpan destinasi favorit untuk booking nanti.</p></div>
+<div class="card"><div class="icon" style="background:rgba(6,182,212,0.15)">👤</div><h4>Dashboard Personal</h4><p>Statistik, riwayat, tiket aktif, member status.</p></div>
+</div>
+</div>
+
+<div class="slide">
+<h3>Admin Panel</h3>
+<h2>Kelola Bisnis dengan Mudah</h2>
+<div class="grid">
+<div class="card"><div class="icon" style="background:rgba(37,99,255,0.15)">📊</div><h4>Dashboard</h4><p>Revenue, pesanan, destinasi, users dalam satu tampilan.</p></div>
+<div class="card"><div class="icon" style="background:rgba(34,197,94,0.15)">🗺️</div><h4>Kelola Destinasi</h4><p>CRUD: foto, harga, jadwal tour, paket termasuk/tidak.</p></div>
+<div class="card"><div class="icon" style="background:rgba(234,179,8,0.15)">📦</div><h4>Kelola Pesanan</h4><p>Status dropdown, detail drawer, filter & search.</p></div>
+<div class="card"><div class="icon" style="background:rgba(168,85,247,0.15)">✅</div><h4>Verifikasi Tiket</h4><p>Scan QR, check-in real-time, riwayat lengkap.</p></div>
+<div class="card"><div class="icon" style="background:rgba(6,182,212,0.15)">📲</div><h4>WhatsApp Otomatis</h4><p>Notifikasi Fonnte saat pembayaran dikonfirmasi.</p></div>
+<div class="card"><div class="icon" style="background:rgba(239,68,68,0.15)">⚙️</div><h4>Pengaturan</h4><p>Info bisnis, biaya, sosmed, rekening, e-wallet.</p></div>
+</div>
+</div>
+
+<div class="slide">
+<h3>Business Flow</h3>
+<h2>Alur Pesanan</h2>
+<ul class="list">
+<li>Customer booking destinasi → status <strong>Pending</strong></li>
+<li>Customer transfer pembayaran</li>
+<li>Admin klik "Tandai Lunas" → <strong>Paid</strong> → WhatsApp otomatis</li>
+<li>Admin konfirmasi → <strong>Confirmed</strong></li>
+<li>Admin kirim e-tiket via WhatsApp</li>
+<li>Hari H: Scan QR → <strong>Check-in</strong></li>
+<li>Trip selesai → <strong>Completed</strong></li>
+<li>Customer tulis ulasan → Admin approve → tampil publik</li>
+</ul>
+</div>
+
+<div class="slide">
+<h3>Technology</h3>
+<h2>Tech Stack Modern</h2>
+<p>Performa tinggi, keamanan, dan skalabilitas.</p>
+<div class="tech-grid">
+<span class="tech-tag">Next.js 14</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Tailwind CSS</span><span class="tech-tag">Supabase</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Vercel</span><span class="tech-tag">Cloudinary</span><span class="tech-tag">Fonnte API</span><span class="tech-tag">Tiptap Editor</span><span class="tech-tag">QR Code</span>
+</div>
+<div class="grid" style="margin-top:40px">
+<div class="card"><h4>🚀 Auto Deploy</h4><p>Push ke GitHub → deploy otomatis dalam detik.</p></div>
+<div class="card"><h4>🔒 Secure</h4><p>Auth, RLS, API server-side, isolasi data per user.</p></div>
+<div class="card"><h4>📱 Mobile First</h4><p>Responsive premium di semua device.</p></div>
+</div>
+</div>
+
+<div class="slide">
+<h3>Keunggulan</h3>
+<h2>Kenapa Octaf Kreasi?</h2>
+<ul class="list">
+<li><strong>Full Dynamic</strong> — ubah dari admin tanpa edit kode</li>
+<li><strong>SEO Ready</strong> — JSON-LD, sitemap, OG tags</li>
+<li><strong>WhatsApp Integration</strong> — notifikasi otomatis</li>
+<li><strong>E-Tiket Digital</strong> — QR Code + download</li>
+<li><strong>Ulasan Real</strong> — verified traveler badge</li>
+<li><strong>Premium UX</strong> — luxury feel, modern travel startup</li>
+<li><strong>Scalable</strong> — destinasi & user tanpa batas</li>
+<li><strong>Custom Domain</strong> — SSL otomatis</li>
+</ul>
+</div>
+
+<div class="slide" style="justify-content:center;align-items:center;text-align:center">
+<h1 style="font-size:3rem">Siap Digunakan.</h1>
+<p style="margin-top:20px;font-size:1.2rem;max-width:500px;color:#64748b">Platform lengkap untuk menjalankan bisnis tour & travel secara profesional.</p>
+<p style="margin-top:40px"><span class="url">www.octafkreasi.com</span></p>
+<p style="margin-top:60px;font-size:0.85rem;color:#475569">Octaf Cipta Kreasi © 2025</p>
+</div>
+</body>
+</html>

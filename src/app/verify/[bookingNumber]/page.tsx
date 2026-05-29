@@ -1,229 +1,228 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 
-interface TicketData {
-  id: string;
-  booking_number: string;
-  destination_name: string;
-  package_name: string;
-  date: string;
-  adults: number;
-  children: number;
-  customer_name: string;
-  payment_status: string;
-  ticket_status: string;
-  created_at: string;
-}
+export const metadata: Metadata = {
+  title: 'Tentang Kami - Octaf Kreasi | Jasa Tour Travel Terpercaya di Indonesia',
+  description:
+    'Octaf Kreasi adalah jasa tour travel terpercaya di Indonesia yang menyediakan paket wisata terbaik ke berbagai destinasi. Kenali lebih dekat tim dan layanan kami.',
+  keywords: ['jasa tour travel terpercaya', 'jasa tour travel Indonesia', 'tentang Octaf Kreasi', 'tour travel Indonesia'],
+};
 
-export default function VerifyTicketPage() {
-  const params = useParams();
-  const bookingNumber = params.bookingNumber as string;
-  const [ticket, setTicket] = useState<TicketData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const [verified, setVerified] = useState(false);
+const keunggulan = [
+  {
+    icon: '💰',
+    title: 'Harga Transparan',
+    description: 'Sebagai jasa tour travel terpercaya, kami menjamin harga yang Anda lihat adalah harga final tanpa biaya tersembunyi.',
+  },
+  {
+    icon: '🛡️',
+    title: 'Perjalanan Terjamin',
+    description: 'Setiap paket wisata dilindungi garansi. Refund penuh jika perjalanan dibatalkan oleh kami.',
+  },
+  {
+    icon: '🌏',
+    title: 'Pengalaman Lokal',
+    description: 'Tim kami terdiri dari ahli perjalanan lokal yang mengenal setiap destinasi di Indonesia dengan baik.',
+  },
+  {
+    icon: '📞',
+    title: 'Support 24/7',
+    description: 'Customer service kami siap membantu kapan saja, sebelum, selama, dan setelah perjalanan Anda.',
+  },
+];
 
-  useEffect(() => {
-    if (bookingNumber) loadTicket();
-  }, [bookingNumber]);
+const stats = [
+  { value: '500+', label: 'Destinasi Wisata' },
+  { value: '100K+', label: 'Traveler Puas' },
+  { value: '4.9/5', label: 'Rating Pengguna' },
+  { value: '5+', label: 'Tahun Pengalaman' },
+];
 
-  const loadTicket = async () => {
-    const { data, error } = await supabase
-      .from('tickets')
-      .select('*')
-      .eq('booking_number', bookingNumber)
-      .single();
+const team = [
+  { name: 'Ahmad Fauzi', role: 'CEO & Founder', initial: 'AF' },
+  { name: 'Sari Dewi', role: 'Head of Operations', initial: 'SD' },
+  { name: 'Budi Hartono', role: 'Head of Marketing', initial: 'BH' },
+  { name: 'Rina Kusuma', role: 'Customer Experience Lead', initial: 'RK' },
+];
 
-    if (error || !data) {
-      setNotFound(true);
-    } else {
-      setTicket(data as TicketData);
-    }
-    setLoading(false);
-  };
-
-  const handleVerify = async () => {
-    if (!ticket) return;
-    const now = new Date().toISOString();
-    
-    // Try with verified_at, fallback to just ticket_status
-    const { error } = await supabase
-      .from('tickets')
-      .update({ ticket_status: 'used', verified_at: now })
-      .eq('id', ticket.id);
-
-    if (error) {
-      await supabase
-        .from('tickets')
-        .update({ ticket_status: 'used' })
-        .eq('id', ticket.id);
-    }
-    setVerified(true);
-  };
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-          <p className="text-sm text-gray-500">Memverifikasi tiket...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (notFound) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-sm text-center">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-50">
-            <svg className="h-10 w-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-            </svg>
-          </div>
-          <h1 className="mt-5 text-xl font-bold text-gray-800">Tiket Tidak Ditemukan</h1>
-          <p className="mt-2 text-sm text-gray-500">
-            Kode booking <span className="font-mono font-semibold">{bookingNumber}</span> tidak valid atau tidak terdaftar dalam sistem kami.
-          </p>
-          <Link href="/" className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700">
-            ← Kembali ke Beranda
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (!ticket) return null;
-
-  const isValid = ticket.payment_status === 'paid' && ticket.ticket_status !== 'cancelled';
-  const ticketDate = new Date(ticket.created_at).toLocaleDateString('id-ID', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  });
-
+export default function TentangKamiPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-sm">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-700">
-            <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
-              <path d="M3 12L7.5 7.5L12 12L16.5 7.5L21 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3 17L7.5 12.5L12 17L16.5 12.5L21 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5"/>
-            </svg>
+    <div className="min-h-screen bg-white">
+      <Header />
+
+      <main>
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-primary-50 via-white to-blue-50 py-16 md:py-24">
+          <div className="container-app text-center">
+            <h1 className="font-heading text-3xl font-bold text-gray-900 md:text-5xl">
+              Jasa Tour Travel Terpercaya di Indonesia
+            </h1>
+            <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-gray-600 md:text-lg">
+              Octaf Kreasi adalah <strong>jasa tour travel terpercaya</strong> yang telah melayani ribuan traveler Indonesia
+              sejak 2019. Kami berkomitmen menghadirkan pengalaman perjalanan wisata terbaik dengan harga terjangkau
+              ke berbagai destinasi menakjubkan di seluruh Indonesia, mulai dari Raja Ampat, Bali, Labuan Bajo,
+              hingga destinasi tersembunyi yang belum banyak diketahui.
+            </p>
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-gray-600 md:text-lg">
+              Sebagai <strong>jasa tour travel Indonesia</strong> yang berpengalaman, kami memahami bahwa setiap
+              perjalanan adalah cerita unik. Itulah mengapa kami merancang setiap paket wisata dengan penuh perhatian,
+              memastikan setiap detail — dari akomodasi, transportasi, hingga aktivitas — memberikan pengalaman
+              yang tak terlupakan bagi Anda dan keluarga.
+            </p>
           </div>
-          <p className="mt-2 text-xs font-semibold text-gray-500">VERIFIKASI TIKET</p>
-        </div>
+        </section>
 
-        {/* Card */}
-        <div className="mt-5 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-100">
-          {/* Status Banner */}
-          {verified ? (
-            <div className="bg-green-500 px-5 py-3 text-center">
-              <div className="flex items-center justify-center gap-2">
-                <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-                <span className="text-sm font-bold text-white">CHECK-IN BERHASIL</span>
-              </div>
-            </div>
-          ) : isValid ? (
-            <div className="bg-blue-600 px-5 py-3 text-center">
-              <span className="text-sm font-bold text-white">✓ TIKET VALID</span>
-            </div>
-          ) : (
-            <div className="bg-red-500 px-5 py-3 text-center">
-              <span className="text-sm font-bold text-white">✗ TIKET TIDAK VALID</span>
-            </div>
-          )}
-
-          {/* Ticket Info */}
-          <div className="p-5 space-y-4">
-            <div>
-              <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400">Kode Booking</p>
-              <p className="mt-0.5 font-mono text-lg font-bold text-gray-800">{ticket.booking_number}</p>
+        {/* Mengapa Memilih Kami */}
+        <section className="py-16">
+          <div className="container-app">
+            <div className="text-center">
+              <h2 className="font-heading text-2xl font-bold text-gray-900 md:text-3xl">
+                Mengapa Memilih Octaf Kreasi?
+              </h2>
+              <p className="mt-3 text-gray-600">
+                Keunggulan kami sebagai jasa tour travel terpercaya di Indonesia
+              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[10px] font-medium text-gray-400">Destinasi</p>
-                <p className="mt-0.5 text-sm font-semibold text-gray-700">{ticket.destination_name}</p>
-              </div>
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[10px] font-medium text-gray-400">Tanggal</p>
-                <p className="mt-0.5 text-sm font-semibold text-gray-700">{ticket.date || '-'}</p>
-              </div>
+            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {keunggulan.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm transition-all hover:shadow-md"
+                >
+                  <span className="text-4xl">{item.icon}</span>
+                  <h3 className="mt-4 text-base font-bold text-gray-900">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.description}</p>
+                </div>
+              ))}
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[10px] font-medium text-gray-400">Nama Pemesan</p>
-                <p className="mt-0.5 text-sm font-semibold text-gray-700">{ticket.customer_name}</p>
-              </div>
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[10px] font-medium text-gray-400">Peserta</p>
-                <p className="mt-0.5 text-sm font-semibold text-gray-700">
-                  {ticket.adults} Dewasa{ticket.children > 0 ? `, ${ticket.children} Anak` : ''}
-                </p>
-              </div>
-            </div>
-
-            {ticket.package_name && (
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[10px] font-medium text-gray-400">Paket</p>
-                <p className="mt-0.5 text-sm font-semibold text-gray-700">{ticket.package_name}</p>
-              </div>
-            )}
-
-            <div className="rounded-lg bg-gray-50 p-3">
-              <p className="text-[10px] font-medium text-gray-400">Status Pembayaran</p>
-              <span className={`mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
-                ticket.payment_status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-              }`}>
-                <span className={`h-1.5 w-1.5 rounded-full ${ticket.payment_status === 'paid' ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                {ticket.payment_status === 'paid' ? 'Lunas' : 'Belum Lunas'}
-              </span>
-            </div>
-
-            <p className="text-[10px] text-gray-400 text-center">Tiket dibuat: {ticketDate}</p>
-
-            {/* Verify Button - only for staff */}
-            {isValid && !verified && (
-              <button
-                type="button"
-                onClick={handleVerify}
-                className="w-full rounded-xl bg-green-600 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-green-700 hover:shadow-md active:scale-[0.98]"
-              >
-                ✓ Konfirmasi Check-in
-              </button>
-            )}
-
-            {verified && (
-              <div className="rounded-xl bg-green-50 p-3 text-center ring-1 ring-green-200">
-                <p className="text-sm font-semibold text-green-700">Tamu sudah check-in ✓</p>
-                <p className="mt-0.5 text-[11px] text-green-600">
-                  {new Date().toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                </p>
-              </div>
-            )}
-
-            {!isValid && (
-              <div className="rounded-xl bg-red-50 p-3 text-center ring-1 ring-red-200">
-                <p className="text-xs text-red-600">
-                  {ticket.payment_status !== 'paid' ? 'Pembayaran belum lunas.' : 'Tiket telah dibatalkan.'}
-                </p>
-              </div>
-            )}
           </div>
-        </div>
+        </section>
 
-        <p className="mt-4 text-center text-[10px] text-gray-400">
-          octafkreasi — Sistem Verifikasi Tiket
-        </p>
-      </div>
+        {/* Visi & Misi */}
+        <section className="bg-gray-50 py-16">
+          <div className="container-app">
+            <div className="mx-auto max-w-4xl">
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div className="rounded-2xl bg-white p-8 shadow-sm">
+                  <h2 className="font-heading text-xl font-bold text-primary">Visi Kami</h2>
+                  <p className="mt-4 text-sm leading-relaxed text-gray-600">
+                    Menjadi jasa tour travel Indonesia nomor satu yang menghubungkan setiap orang dengan
+                    keindahan alam dan budaya Nusantara, serta menjadikan perjalanan wisata yang berkualitas
+                    dapat diakses oleh semua kalangan.
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-white p-8 shadow-sm">
+                  <h2 className="font-heading text-xl font-bold text-primary">Misi Kami</h2>
+                  <ul className="mt-4 space-y-2 text-sm leading-relaxed text-gray-600">
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1 text-primary">•</span>
+                      Menyediakan paket wisata berkualitas dengan harga terjangkau
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1 text-primary">•</span>
+                      Mengutamakan keamanan dan kenyamanan setiap traveler
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1 text-primary">•</span>
+                      Mendukung pariwisata berkelanjutan dan ekonomi lokal
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="mt-1 text-primary">•</span>
+                      Memberikan pelayanan terbaik dengan customer support 24/7
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Pencapaian */}
+        <section className="py-16">
+          <div className="container-app">
+            <div className="text-center">
+              <h2 className="font-heading text-2xl font-bold text-gray-900 md:text-3xl">
+                Pencapaian Kami
+              </h2>
+              <p className="mt-3 text-gray-600">
+                Angka-angka yang membuktikan kepercayaan traveler Indonesia
+              </p>
+            </div>
+
+            <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <p className="text-3xl font-bold text-primary md:text-4xl">{stat.value}</p>
+                  <p className="mt-2 text-sm text-gray-600">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Tim Kami */}
+        <section className="bg-gray-50 py-16">
+          <div className="container-app">
+            <div className="text-center">
+              <h2 className="font-heading text-2xl font-bold text-gray-900 md:text-3xl">
+                Tim Kami
+              </h2>
+              <p className="mt-3 text-gray-600">
+                Orang-orang di balik jasa tour travel terpercaya Octaf Kreasi
+              </p>
+            </div>
+
+            <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
+              {team.map((member) => (
+                <div key={member.name} className="text-center">
+                  <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-700 text-2xl font-bold text-white shadow-lg md:h-24 md:w-24">
+                    {member.initial}
+                  </div>
+                  <h3 className="mt-4 text-sm font-bold text-gray-900">{member.name}</h3>
+                  <p className="mt-1 text-xs text-gray-500">{member.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16">
+          <div className="container-app">
+            <div className="rounded-3xl bg-gradient-to-br from-primary-700 via-primary to-primary-800 px-8 py-14 text-center md:px-16">
+              <h2 className="font-heading text-2xl font-bold text-white md:text-3xl">
+                Siap Memulai Petualangan Bersama Kami?
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base text-white/80">
+                Percayakan perjalanan wisata Anda kepada Octaf Kreasi — jasa tour travel Indonesia yang
+                mengutamakan kualitas, keamanan, dan kepuasan Anda. Pesan paket wisata sekarang!
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-bold text-primary shadow-lg transition-all hover:scale-105"
+                >
+                  Pesan Paket Wisata
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/kontak"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-white/30 px-8 py-3.5 text-base font-semibold text-white transition-all hover:border-white hover:bg-white/10"
+                >
+                  Hubungi Kami
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }

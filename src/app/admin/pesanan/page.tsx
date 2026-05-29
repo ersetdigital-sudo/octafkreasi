@@ -65,6 +65,13 @@ const FILTER_TABS = [
   { value: 'cancelled', label: 'Dibatalkan' },
 ];
 
+// Mask phone number: 081573059442 → 0815****9442
+function maskPhone(phone: string): string {
+  const clean = phone.replace(/\D/g, '');
+  if (clean.length <= 6) return clean;
+  return clean.slice(0, 4) + '****' + clean.slice(-4);
+}
+
 const TICKET_STATUS: Record<string, { label: string; color: string }> = {
   active:     { label: 'Aktif',      color: 'bg-emerald-50 text-emerald-700 ring-emerald-200' },
   upcoming:   { label: 'Upcoming',   color: 'bg-blue-50 text-blue-700 ring-blue-200' },
@@ -105,16 +112,27 @@ function StatusDropdown({ order, onUpdate, isUpdating }: {
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
   const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
   const actions = STATUS_ACTIONS[order.status] || [];
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node) && btnRef.current && !btnRef.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
+
+  const handleOpen = () => {
+    if (actions.length === 0) return;
+    if (btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setPos({ top: rect.bottom + 6, left: rect.left });
+    }
+    setOpen((v) => !v);
+  };
 
   const handleSelect = (value: string) => {
     setOpen(false);
@@ -123,49 +141,84 @@ function StatusDropdown({ order, onUpdate, isUpdating }: {
   };
 
   return (
-    <div className="relative" ref={ref}>
-      <button type="button"
-        onClick={() => actions.length > 0 && setOpen((v) => !v)}
-        disabled={isUpdating || actions.length === 0}
-        className={`inline-flex items-center gap-1.5 text-white transition-all ${cfg.bg} ${actions.length > 0 ? 'cursor-pointer hover:opacity-90' : 'cursor-default'} disabled:opacity-60`}
-        style={{ borderRadius: '6px', padding: '4px 10px', fontSize: '12px', fontWeight: 600 }}>
-        {isUpdating ? (
-          <svg className="h-3 w-3 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-          </svg>
-        ) : cfg.label}
-        {actions.length > 0 && !isUpdating && (
-          <svg className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-          </svg>
-        )}
-      </button>
+    <>
+      <div className="relative">
+        <button type="button" ref={btnRef}
+          onClick={handleOpen}
+          disabled={isUpdating || actions.length === 0}
+          className={`inline-flex items-center gap-1.5 text-white transition-all ${cfg.bg} ${actions.length > 0 ? 'cursor-pointer hover:opacity-90' : 'cursor-default'} disabled:opacity-60`}
+          style={{ borderRadius: '6px', padding: '4px 10px', fontSize: '12px', fontWeight: 600 }}>
+          {isUpdating ? (
+            <svg className="h-3 w-3 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+          ) : cfg.label}
+          {actions.length > 0 && !isUpdating && (
+            <svg className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Desktop dropdown — fixed position */}
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-1.5 w-44 animate-[fadeIn_0.15s_ease-out] rounded-xl bg-white py-1"
-          style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)', border: '1px solid #F1F5F9' }}>
-          {actions.map((action, i) => (
-            <React.Fragment key={action.value}>
-              {action.icon === 'x' && i > 0 && <div className="my-1 border-t border-gray-100" />}
-              <button type="button" onClick={() => handleSelect(action.value)}
-                className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-[#F8FAFF]"
-                style={{ color: action.color }}>
-                {action.icon === 'check' ? (
-                  <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                ) : (
-                  <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                )}
-                {action.label}
-              </button>
-            </React.Fragment>
-          ))}
-        </div>
+        <>
+          {/* Desktop */}
+          <div ref={ref} className="hidden md:block fixed z-[100] w-44 animate-[fadeIn_0.15s_ease-out] rounded-xl bg-white py-1"
+            style={{ top: pos.top, left: pos.left, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', border: '1px solid #F1F5F9' }}>
+            {actions.map((action, i) => (
+              <React.Fragment key={action.value}>
+                {action.icon === 'x' && i > 0 && <div className="my-1 border-t border-gray-100" />}
+                <button type="button" onClick={() => handleSelect(action.value)}
+                  className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-[#F8FAFF]"
+                  style={{ color: action.color }}>
+                  {action.icon === 'check' ? (
+                    <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  ) : (
+                    <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  )}
+                  {action.label}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+
+          {/* Mobile bottom sheet */}
+          <div className="md:hidden fixed inset-0 z-[100]">
+            <div className="absolute inset-0 bg-black/30 animate-[fadeIn_0.15s_ease-out]" onClick={() => setOpen(false)} />
+            <div className="absolute bottom-0 left-0 right-0 animate-[slideUp_0.2s_ease-out] rounded-t-2xl bg-white pb-8 pt-3">
+              <div className="flex justify-center mb-3"><div className="h-1 w-10 rounded-full bg-gray-200" /></div>
+              <p className="px-5 pb-3 text-sm font-bold text-gray-800">Ubah Status Pesanan</p>
+              {actions.map((action, i) => (
+                <React.Fragment key={action.value}>
+                  {action.icon === 'x' && i > 0 && <div className="mx-5 my-1 border-t border-gray-100" />}
+                  <button type="button" onClick={() => handleSelect(action.value)}
+                    className="flex w-full items-center gap-3 px-5 py-3.5 text-left text-[15px] font-medium transition-colors active:bg-gray-50"
+                    style={{ color: action.color }}>
+                    {action.icon === 'check' ? (
+                      <svg className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    ) : (
+                      <svg className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                    {action.label}
+                  </button>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        </>
       )}
-    </div>
+    </>
   );
 }
 
@@ -246,7 +299,7 @@ function OrderDrawer({ order, onClose }: { order: Order; onClose: () => void }) 
               <div className="rounded-xl border border-[#F1F5F9] overflow-hidden divide-y divide-[#F8FAFF]">
                 {order.customer_name && <Row label="Nama" value={order.customer_name} bold />}
                 {order.customer_email && <Row label="Email" value={order.customer_email} />}
-                {order.customer_phone && <Row label="Telepon" value={order.customer_phone} />}
+                {order.customer_phone && <Row label="Telepon" value={maskPhone(order.customer_phone)} />}
               </div>
             </section>
           )}
@@ -318,6 +371,43 @@ export default function AdminPesananPage() {
     setUpdatingId(null);
     if (error) { showToast('error', 'Gagal mengubah status'); return; }
     showToast('success', `Status diubah ke ${STATUS_CONFIG[newStatus]?.label}`);
+
+    // Auto-send WhatsApp when status changed to "paid"
+    if (newStatus === 'paid') {
+      const order = orders.find(o => o.id === id);
+      if (order && order.customer_phone) {
+        try {
+          // Get template from settings
+          const { data: fonnteSettings } = await supabase.from('settings').select('value').eq('id', 'fonnte').single();
+          if (fonnteSettings?.value) {
+            const val = typeof fonnteSettings.value === 'string' ? JSON.parse(fonnteSettings.value) : fonnteSettings.value;
+            if (val.api_key && val.template) {
+              const peserta = `${order.adults} Dewasa${order.children > 0 ? `, ${order.children} Anak` : ''}`;
+
+              // Fetch booking_number dari tiket terkait
+              const { data: ticketData } = await supabase.from('tickets').select('booking_number').eq('order_id', id).limit(1).single();
+              const kodeTicket = ticketData?.booking_number || `OC-${id.slice(0, 8).toUpperCase()}`;
+
+              const message = val.template
+                .replace('{nama}', order.customer_name || 'Pelanggan')
+                .replace('{destinasi}', order.destination_name)
+                .replace('{tanggal}', order.date || '-')
+                .replace('{peserta}', peserta)
+                .replace('{kode_tiket}', kodeTicket)
+                .replace('{link_tiket}', `https://www.octafkreasi.com/akun/tiket`);
+
+              await fetch('/api/fonnte/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target: order.customer_phone, message, orderId: id }),
+              });
+              showToast('success', 'Notifikasi WhatsApp terkirim');
+            }
+          }
+        } catch { /* silent fail — WA is bonus, not critical */ }
+      }
+    }
+
     loadData();
   };
 

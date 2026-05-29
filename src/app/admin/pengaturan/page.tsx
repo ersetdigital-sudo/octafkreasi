@@ -19,6 +19,11 @@ export default function AdminPengaturanPage() {
   const [showWalletForm, setShowWalletForm] = useState(false);
   const [editingBank, setEditingBank] = useState<BankAccount | null>(null);
   const [editingWallet, setEditingWallet] = useState<EWallet | null>(null);
+  const [fonnte, setFonnte] = useState({ api_key: '', template: 'Halo Kak {nama},\n\nPembayaran perjalanan Anda telah berhasil dikonfirmasi.\n\nDetail Perjalanan:\nDestinasi: {destinasi}\nTanggal: {tanggal}\nPeserta: {peserta}\nKode Tiket: {kode_tiket}\n\nE-ticket: {link_tiket}\n\nTerima kasih telah memilih Octaf Kreasi. Selamat mempersiapkan perjalanan Anda!' });
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [testingFonnte, setTestingFonnte] = useState(false);
+  const [fonnteStatus, setFonnteStatus] = useState<'idle' | 'connected' | 'failed'>('idle');
+  const [waLogs, setWaLogs] = useState<{ id: string; target: string; status: string; created_at: string }[]>([]);
 
   useEffect(() => { loadAll(); }, []);
 
@@ -34,10 +39,16 @@ export default function AdminPengaturanPage() {
         if (s.id === 'business') setBusiness(val);
         if (s.id === 'fees') setFees(val);
         if (s.id === 'social') setSocial(val);
+        if (s.id === 'fonnte') setFonnte(prev => ({ ...prev, ...val }));
       }
     }
     setBanks(banksRes.data || []);
     setEwallets(ewalletsRes.data || []);
+
+    // Load WA logs
+    const { data: logs } = await supabase.from('wa_logs').select('id, target, status, created_at').order('created_at', { ascending: false }).limit(10);
+    setWaLogs(logs || []);
+
     setLoading(false);
   };
 
@@ -45,7 +56,6 @@ export default function AdminPengaturanPage() {
 
   const saveSetting = async (id: string, value: unknown) => {
     await supabase.from('settings').upsert({ id, value, updated_at: new Date().toISOString() });
-    showToast(true, 'Berhasil disimpan');
   };
 
   const saveBank = async (data: { bank_name: string; account_number: string; account_name: string }) => {
@@ -167,6 +177,87 @@ export default function AdminPengaturanPage() {
         )}
       </Card>
 
+      {/* ── Integrasi WhatsApp Fonnte ── */}
+      <Card title="Integrasi WhatsApp (Fonnte)" icon="📲">
+        <div className="space-y-4">
+          {/* API Key */}
+          <div>
+            <label className="text-xs font-semibold text-gray-500">API Key Fonnte</label>
+            <div className="mt-1.5 flex gap-2">
+              <div className="relative flex-1">
+                <input
+                  type={showApiKey ? 'text' : 'password'}
+                  value={fonnte.api_key}
+                  onChange={(e) => setFonnte({ ...fonnte, api_key: e.target.value })}
+                  placeholder="Masukkan API Key dari dashboard Fonnte"
+                  className="w-full rounded-xl border border-gray-200 px-4 py-2.5 pr-10 text-sm font-mono focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                />
+                <button type="button" onClick={() => setShowApiKey(!showApiKey)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    {showApiKey
+                      ? <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                      : <><path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></>
+                    }
+                  </svg>
+                </button>
+              </div>
+              <button type="button" onClick={async () => {
+                if (!fonnte.api_key) { showToast(false, 'Masukkan API Key dulu'); return; }
+                setTestingFonnte(true);
+                try {
+                  const res = await fetch('/api/fonnte/test', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey: fonnte.api_key }) });
+                  const data = await res.json();
+                  setFonnteStatus(data.success ? 'connected' : 'failed');
+                  showToast(data.success, data.success ? 'Terhubung ke Fonnte!' : data.error);
+                } catch { setFonnteStatus('failed'); showToast(false, 'Gagal test koneksi'); }
+                setTestingFonnte(false);
+              }} disabled={testingFonnte}
+                className="rounded-xl border border-gray-200 px-4 py-2.5 text-xs font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-50 whitespace-nowrap">
+                {testingFonnte ? '...' : 'Test Koneksi'}
+              </button>
+            </div>
+            {fonnteStatus === 'connected' && <p className="mt-1.5 text-xs text-emerald-600 font-medium">✓ Terhubung</p>}
+            {fonnteStatus === 'failed' && <p className="mt-1.5 text-xs text-red-500 font-medium">✕ Gagal terhubung</p>}
+          </div>
+
+          {/* Template */}
+          <div>
+            <label className="text-xs font-semibold text-gray-500">Template Pesan WhatsApp</label>
+            <textarea
+              value={fonnte.template}
+              onChange={(e) => setFonnte({ ...fonnte, template: e.target.value })}
+              rows={8}
+              className="mt-1.5 w-full rounded-xl border border-gray-200 px-4 py-3 text-sm font-mono leading-relaxed focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+            />
+            <p className="mt-2 text-[11px] text-gray-400">
+              Variabel: <code className="bg-gray-100 px-1 rounded">{'{nama}'}</code> <code className="bg-gray-100 px-1 rounded">{'{destinasi}'}</code> <code className="bg-gray-100 px-1 rounded">{'{tanggal}'}</code> <code className="bg-gray-100 px-1 rounded">{'{peserta}'}</code> <code className="bg-gray-100 px-1 rounded">{'{kode_tiket}'}</code> <code className="bg-gray-100 px-1 rounded">{'{link_tiket}'}</code>
+            </p>
+          </div>
+
+          <SaveBtn onClick={() => saveSetting('fonnte', fonnte)} />
+        </div>
+      </Card>
+
+      {/* ── Log Pengiriman WA ── */}
+      {waLogs.length > 0 && (
+        <Card title="Log Pengiriman WhatsApp" icon="📋">
+          <div className="space-y-1.5 max-h-[300px] overflow-y-auto">
+            {waLogs.map((log) => (
+              <div key={log.id} className="flex items-center justify-between rounded-lg border border-gray-100 px-3 py-2">
+                <div>
+                  <p className="text-xs font-mono text-gray-700">{log.target}</p>
+                  <p className="text-[10px] text-gray-400">{new Date(log.created_at).toLocaleString('id-ID')}</p>
+                </div>
+                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${log.status === 'sent' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`}>
+                  {log.status === 'sent' ? 'Terkirim' : 'Gagal'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
       {/* Modals */}
       {showBankForm && <Modal title={editingBank ? 'Edit Rekening' : 'Tambah Rekening'} onClose={() => { setShowBankForm(false); setEditingBank(null); }}>
         <BankForm bank={editingBank} onSave={saveBank} />
@@ -205,12 +296,46 @@ function Input({ label, value, onChange, type = 'text', placeholder, full }: { l
 }
 
 function SaveBtn({ onClick }: { onClick: () => void }) {
+  const [state, setState] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+  const handleClick = async () => {
+    setState('saving');
+    await onClick();
+    setState('saved');
+    setTimeout(() => setState('idle'), 2500);
+  };
+
   return (
     <div className="mt-5 flex justify-end">
-      <button type="button" onClick={onClick}
-        className="rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition-all hover:-translate-y-0.5 hover:shadow-lg"
-        style={{ background: 'linear-gradient(135deg, #2563FF, #1E40AF)' }}>
-        Simpan Perubahan
+      <button type="button" onClick={handleClick} disabled={state !== 'idle'}
+        className={`relative overflow-hidden rounded-xl px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all duration-300 disabled:cursor-not-allowed ${
+          state === 'saved'
+            ? 'bg-emerald-500 shadow-emerald-500/20'
+            : state === 'saving'
+            ? 'bg-blue-400 shadow-blue-400/20'
+            : 'shadow-blue-600/20 hover:-translate-y-0.5 hover:shadow-lg'
+        }`}
+        style={state === 'idle' ? { background: 'linear-gradient(135deg, #2563FF, #1E40AF)' } : {}}>
+        <span className={`inline-flex items-center gap-2 transition-all duration-200 ${state !== 'idle' ? 'opacity-0' : 'opacity-100'}`}>
+          Simpan Perubahan
+        </span>
+        {state === 'saving' && (
+          <span className="absolute inset-0 flex items-center justify-center gap-2">
+            <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+            Menyimpan...
+          </span>
+        )}
+        {state === 'saved' && (
+          <span className="absolute inset-0 flex items-center justify-center gap-1.5 animate-[fadeIn_0.2s_ease-out]">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Tersimpan
+          </span>
+        )}
       </button>
     </div>
   );

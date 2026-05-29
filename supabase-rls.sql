@@ -1,5 +1,5 @@
 -- ============================================================
--- Row Level Security (RLS) untuk Octafkreasi
+-- Row Level Security (RLS) untuk Octaf Kreasi
 -- Jalankan script ini di Supabase SQL Editor
 -- ============================================================
 

@@ -103,8 +103,10 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
     description: dbDest?.description || hardcodedDest?.description || '',
     image: dbDest?.image || hardcodedDest?.image || '',
     imageAlt: dbDest?.image_alt || hardcodedDest?.imageAlt || '',
-    rating: dbDest?.rating || hardcodedDest?.rating || 4.5,
-    reviewCount: dbDest?.review_count || hardcodedDest?.reviewCount || 0,
+    rating: dbReviews.length > 0
+      ? dbReviews.reduce((sum, r) => sum + r.rating, 0) / dbReviews.length
+      : (dbDest?.rating && dbDest?.review_count > 0 ? dbDest.rating : (hardcodedDest?.reviewCount ? hardcodedDest?.rating || 0 : 0)),
+    reviewCount: dbReviews.length > 0 ? dbReviews.length : (dbDest?.review_count || hardcodedDest?.reviewCount || 0),
     priceStartFrom: dbDest?.price_start_from || hardcodedDest?.priceStartFrom || 0,
     duration: dbDest?.duration || hardcodedDest?.duration || '3 Hari 2 Malam',
     gallery: dbDest?.images && dbDest.images.length > 1

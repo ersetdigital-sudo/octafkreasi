@@ -24,12 +24,22 @@ export default function AdminLoginPage() {
       return;
     }
 
-    // Check if user is admin
-    const { data: profile } = await supabase
+    // Check if profile exists
+    let { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', data.user.id)
       .single();
+
+    // Auto-create profile if not exists
+    if (!profile) {
+      const { data: newProfile } = await supabase
+        .from('profiles')
+        .insert({ id: data.user.id, full_name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0] || 'User', role: 'user' })
+        .select('role')
+        .single();
+      profile = newProfile;
+    }
 
     if (profile?.role !== 'admin') {
       await supabase.auth.signOut();
@@ -46,9 +56,12 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <span className="text-2xl font-bold text-white">
-            octaf<span className="text-blue-400">kreasi</span>
-          </span>
+          <div className="flex items-center justify-center gap-2.5">
+            <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png,w_120,q_auto,f_auto/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-9 w-auto" />
+            <span className="text-2xl font-bold text-white">
+              octaf<span className="text-blue-400">kreasi</span>
+            </span>
+          </div>
           <p className="mt-2 text-sm text-gray-400">Admin Dashboard</p>
         </div>
 
@@ -83,7 +96,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="mt-1 w-full rounded-lg border border-gray-700 bg-gray-900 px-3 py-2.5 text-sm text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="••••••••"
+                placeholder="��������"
               />
             </div>
             <button

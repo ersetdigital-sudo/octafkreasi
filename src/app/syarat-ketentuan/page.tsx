@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
@@ -24,7 +24,7 @@ export default function SyaratKetentuanPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">1. Ketentuan Umum</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Syarat dan Ketentuan ini mengatur penggunaan platform octafkreasi dan semua layanan yang disediakan. Dengan mengakses atau menggunakan layanan kami, Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh syarat dan ketentuan ini. Jika Anda tidak menyetujui salah satu ketentuan, mohon untuk tidak menggunakan layanan kami.
+                  Syarat dan Ketentuan ini mengatur penggunaan platform Octaf Kreasi dan semua layanan yang disediakan. Dengan mengakses atau menggunakan layanan kami, Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh syarat dan ketentuan ini. Jika Anda tidak menyetujui salah satu ketentuan, mohon untuk tidak menggunakan layanan kami.
                 </p>
               </section>
 
@@ -49,7 +49,7 @@ export default function SyaratKetentuanPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">3. Pemesanan Paket Wisata</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Proses pemesanan paket wisata di octafkreasi meliputi:
+                  Proses pemesanan paket wisata di Octaf Kreasi meliputi:
                 </p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-600">
                   <li><strong>Proses Booking:</strong> Pilih paket, tentukan tanggal dan jumlah peserta, isi data diri, dan lakukan pembayaran</li>
@@ -57,7 +57,7 @@ export default function SyaratKetentuanPage() {
                   <li><strong>Perubahan:</strong> Perubahan jadwal atau detail pesanan dapat dilakukan maksimal 3 hari sebelum keberangkatan, tergantung ketersediaan</li>
                 </ul>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Pemesanan dianggap sah setelah pembayaran dikonfirmasi oleh sistem kami. octafkreasi berhak membatalkan pesanan jika ditemukan indikasi penipuan atau pelanggaran ketentuan.
+                  Pemesanan dianggap sah setelah pembayaran dikonfirmasi oleh sistem kami. Octaf Kreasi berhak membatalkan pesanan jika ditemukan indikasi penipuan atau pelanggaran ketentuan.
                 </p>
               </section>
 
@@ -118,7 +118,7 @@ export default function SyaratKetentuanPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">6. Tanggung Jawab Pengguna</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Sebagai pengguna layanan octafkreasi, Anda bertanggung jawab untuk:
+                  Sebagai pengguna layanan Octaf Kreasi, Anda bertanggung jawab untuk:
                 </p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-600">
                   <li>Memberikan informasi yang benar dan akurat saat melakukan pemesanan</li>
@@ -129,11 +129,11 @@ export default function SyaratKetentuanPage() {
                 </ul>
               </section>
 
-              {/* 7. Batasan Tanggung Jawab octafkreasi */}
+              {/* 7. Batasan Tanggung Jawab Octaf Kreasi */}
               <section>
-                <h2 className="text-xl font-bold text-gray-900">7. Batasan Tanggung Jawab octafkreasi</h2>
+                <h2 className="text-xl font-bold text-gray-900">7. Batasan Tanggung Jawab Octaf Kreasi</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  octafkreasi bertindak sebagai platform perantara antara pengguna dan penyedia layanan wisata. Kami tidak bertanggung jawab atas:
+                  Octaf Kreasi bertindak sebagai platform perantara antara pengguna dan penyedia layanan wisata. Kami tidak bertanggung jawab atas:
                 </p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-600">
                   <li>Perubahan jadwal atau pembatalan oleh pihak penyedia layanan (maskapai, hotel, operator tur)</li>
@@ -148,7 +148,7 @@ export default function SyaratKetentuanPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">8. Hak Kekayaan Intelektual</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Seluruh konten di platform octafkreasi, termasuk namun tidak terbatas pada teks, gambar, logo, desain, kode program, dan materi lainnya, dilindungi oleh hak cipta dan hak kekayaan intelektual. Pengguna dilarang menyalin, memodifikasi, mendistribusikan, atau menggunakan konten tersebut untuk tujuan komersial tanpa izin tertulis dari octafkreasi.
+                  Seluruh konten di platform Octaf Kreasi, termasuk namun tidak terbatas pada teks, gambar, logo, desain, kode program, dan materi lainnya, dilindungi oleh hak cipta dan hak kekayaan intelektual. Pengguna dilarang menyalin, memodifikasi, mendistribusikan, atau menggunakan konten tersebut untuk tujuan komersial tanpa izin tertulis dari Octaf Kreasi.
                 </p>
               </section>
 
@@ -156,7 +156,7 @@ export default function SyaratKetentuanPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">9. Penyelesaian Sengketa</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Setiap sengketa yang timbul dari penggunaan layanan octafkreasi akan diselesaikan melalui:
+                  Setiap sengketa yang timbul dari penggunaan layanan Octaf Kreasi akan diselesaikan melalui:
                 </p>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-600">
                   <li>Musyawarah untuk mufakat antara kedua belah pihak</li>
@@ -169,7 +169,7 @@ export default function SyaratKetentuanPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">10. Perubahan Syarat dan Ketentuan</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  octafkreasi berhak mengubah Syarat dan Ketentuan ini kapan saja. Perubahan akan berlaku efektif setelah dipublikasikan di platform kami. Kami akan memberitahukan perubahan signifikan melalui email atau notifikasi di platform. Penggunaan berkelanjutan atas layanan kami setelah perubahan dianggap sebagai persetujuan Anda terhadap syarat dan ketentuan yang diperbarui.
+                  Octaf Kreasi berhak mengubah Syarat dan Ketentuan ini kapan saja. Perubahan akan berlaku efektif setelah dipublikasikan di platform kami. Kami akan memberitahukan perubahan signifikan melalui email atau notifikasi di platform. Penggunaan berkelanjutan atas layanan kami setelah perubahan dianggap sebagai persetujuan Anda terhadap syarat dan ketentuan yang diperbarui.
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
                   Jika Anda memiliki pertanyaan mengenai Syarat dan Ketentuan ini, silakan hubungi kami di hello@octafkreasi.id.

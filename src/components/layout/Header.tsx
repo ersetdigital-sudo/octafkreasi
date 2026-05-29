@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { navLinks, userActions } from '@/data/navigation';
 import { cn } from '@/lib/utils';
@@ -71,11 +72,29 @@ export function Header() {
               </svg>
             </button>
 
+            {/* Mobile: User avatar with dropdown */}
+            {user ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 md:hidden"
+                aria-label="Keluar"
+              >
+                <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+              </button>
+            ) : (
+              <Link href="/login" className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 md:hidden" aria-label="Masuk">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+              </Link>
+            )}
+
             {/* Logo — hidden on mobile, shown on desktop */}
             <Link href="/" className="hidden items-center gap-2.5 md:flex">
-              <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-10 w-auto" />
+              <NextImage src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png,w_120,q_auto,f_auto/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" width={40} height={40} className="h-10 w-auto" />
               <span className="text-xl font-bold tracking-tight text-gray-900">
-                octaf<span className="text-primary">kreasi</span>
+                Octaf <span className="text-primary">Kreasi</span>
               </span>
             </Link>
 
@@ -200,7 +219,10 @@ export function Header() {
             {/* Logo */}
             <div className="px-6 pt-8">
               <Link href="/" className="flex items-center gap-3" onClick={() => setSidebarOpen(false)}>
-                <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-10 w-auto" />
+                <NextImage src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png,w_120,q_auto,f_auto/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" width={40} height={40} className="h-10 w-auto" />
+                <span className="text-xl font-bold text-gray-900">
+                  Octaf <span className="text-primary">Kreasi</span>
+                </span>
               </Link>
             </div>
 

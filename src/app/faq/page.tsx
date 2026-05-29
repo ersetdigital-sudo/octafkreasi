@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
@@ -76,7 +76,7 @@ export default function FAQPage() {
               Pertanyaan yang Sering Ditanya
             </h1>
             <p className="mt-4 text-gray-600">
-              Temukan jawaban untuk pertanyaan umum seputar pemesanan paket wisata di octafkreasi
+              Temukan jawaban untuk pertanyaan umum seputar pemesanan paket wisata di Octaf Kreasi
             </p>
           </div>
 

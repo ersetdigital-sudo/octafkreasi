@@ -9,10 +9,10 @@ interface PopularDestinationsProps {
   destinations: Destination[];
 }
 
-const BADGES: Record<number, string> = {
-  0: 'BEST SELLER',
-  1: 'POPULER',
-  2: 'POPULER',
+const BADGE_LABELS: Record<string, string> = {
+  'best-seller': 'BEST SELLER',
+  'populer': 'POPULER',
+  'baru': 'BARU',
 };
 
 export function PopularDestinations({ destinations }: PopularDestinationsProps) {
@@ -66,7 +66,7 @@ export function PopularDestinations({ destinations }: PopularDestinationsProps) 
               <div key={destination.id} style={{ scrollSnapAlign: 'start' }}>
                 <DestinationCard
                   destination={destination}
-                  badge={BADGES[index]}
+                  badge={destination.badge ? BADGE_LABELS[destination.badge] || destination.badge.toUpperCase() : undefined}
                 />
               </div>
             ))}

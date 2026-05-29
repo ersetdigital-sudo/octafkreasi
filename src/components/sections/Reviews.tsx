@@ -44,7 +44,7 @@ export function Reviews({ reviews, rating, reviewCount }: ReviewsProps) {
                 </svg>
               ))}
             </div>
-            <span className="text-lg font-bold text-gray-900">{rating}</span>
+            <span className="text-lg font-bold text-gray-900">{rating.toFixed(1)}</span>
             <span className="text-sm text-gray-400">dari {reviewCount.toLocaleString('id-ID')} reviews</span>
           </div>
         </div>

@@ -72,9 +72,9 @@ export default function RegisterPage() {
           <div className="mt-6 rounded-xl border border-blue-100 bg-blue-50 p-4 text-left">
             <p className="text-xs font-medium text-blue-800">Tips:</p>
             <ul className="mt-1.5 space-y-1 text-xs text-blue-700">
-              <li>• Cek folder Spam/Junk jika tidak menemukan email</li>
-              <li>• Link konfirmasi berlaku selama 24 jam</li>
-              <li>• Pastikan email yang didaftarkan benar</li>
+              <li>� Cek folder Spam/Junk jika tidak menemukan email</li>
+              <li>� Link konfirmasi berlaku selama 24 jam</li>
+              <li>� Pastikan email yang didaftarkan benar</li>
             </ul>
           </div>
 
@@ -103,14 +103,9 @@ export default function RegisterPage() {
       <div className="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-16 xl:px-24">
         {/* Logo */}
         <Link href="/" className="mb-10 flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-700 shadow-md shadow-primary/30">
-            <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
-              <path d="M3 12L7.5 7.5L12 12L16.5 7.5L21 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3 17L7.5 12.5L12 17L16.5 12.5L21 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5"/>
-            </svg>
-          </span>
+          <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png,w_120,q_auto,f_auto/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-9 w-auto" />
           <span className="text-xl font-bold text-gray-900">
-            octaf<span className="text-primary">kreasi</span>
+            Octaf <span className="text-primary">Kreasi</span>
           </span>
         </Link>
 
@@ -248,7 +243,7 @@ export default function RegisterPage() {
             Mulai Petualanganmu
           </h2>
           <p className="mt-4 max-w-md text-base text-white/80">
-            Bergabung dengan ribuan traveler yang sudah mempercayakan perjalanan mereka kepada octafkreasi.
+            Bergabung dengan ribuan traveler yang sudah mempercayakan perjalanan mereka kepada Octaf Kreasi.
           </p>
           <div className="mt-8 space-y-3">
             <div className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">

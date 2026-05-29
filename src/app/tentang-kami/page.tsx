@@ -1,13 +1,13 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Tentang Kami - Octafkreasi | Jasa Tour Travel Terpercaya di Indonesia',
+  title: 'Tentang Kami - Octaf Kreasi | Jasa Tour Travel Terpercaya di Indonesia',
   description:
-    'Octafkreasi adalah jasa tour travel terpercaya di Indonesia yang menyediakan paket wisata terbaik ke berbagai destinasi. Kenali lebih dekat tim dan layanan kami.',
-  keywords: ['jasa tour travel terpercaya', 'jasa tour travel Indonesia', 'tentang octafkreasi', 'tour travel Indonesia'],
+    'Octaf Kreasi adalah jasa tour travel terpercaya di Indonesia yang menyediakan paket wisata terbaik ke berbagai destinasi. Kenali lebih dekat tim dan layanan kami.',
+  keywords: ['jasa tour travel terpercaya', 'jasa tour travel Indonesia', 'tentang Octaf Kreasi', 'tour travel Indonesia'],
 };
 
 const keunggulan = [
@@ -60,7 +60,7 @@ export default function TentangKamiPage() {
               Jasa Tour Travel Terpercaya di Indonesia
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-gray-600 md:text-lg">
-              Octafkreasi adalah <strong>jasa tour travel terpercaya</strong> yang telah melayani ribuan traveler Indonesia
+              Octaf Kreasi adalah <strong>jasa tour travel terpercaya</strong> yang telah melayani ribuan traveler Indonesia
               sejak 2019. Kami berkomitmen menghadirkan pengalaman perjalanan wisata terbaik dengan harga terjangkau
               ke berbagai destinasi menakjubkan di seluruh Indonesia, mulai dari Raja Ampat, Bali, Labuan Bajo,
               hingga destinasi tersembunyi yang belum banyak diketahui.
@@ -79,7 +79,7 @@ export default function TentangKamiPage() {
           <div className="container-app">
             <div className="text-center">
               <h2 className="font-heading text-2xl font-bold text-gray-900 md:text-3xl">
-                Mengapa Memilih Octafkreasi?
+                Mengapa Memilih Octaf Kreasi?
               </h2>
               <p className="mt-3 text-gray-600">
                 Keunggulan kami sebagai jasa tour travel terpercaya di Indonesia
@@ -171,7 +171,7 @@ export default function TentangKamiPage() {
                 Tim Kami
               </h2>
               <p className="mt-3 text-gray-600">
-                Orang-orang di balik jasa tour travel terpercaya Octafkreasi
+                Orang-orang di balik jasa tour travel terpercaya Octaf Kreasi
               </p>
             </div>
 
@@ -197,7 +197,7 @@ export default function TentangKamiPage() {
                 Siap Memulai Petualangan Bersama Kami?
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-base text-white/80">
-                Percayakan perjalanan wisata Anda kepada Octafkreasi — jasa tour travel Indonesia yang
+                Percayakan perjalanan wisata Anda kepada Octaf Kreasi — jasa tour travel Indonesia yang
                 mengutamakan kualitas, keamanan, dan kepuasan Anda. Pesan paket wisata sekarang!
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">

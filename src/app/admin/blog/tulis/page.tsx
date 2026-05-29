@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -9,7 +9,17 @@ import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
 import { supabase } from '@/lib/supabase';
+
+function countWords(html: string): number {
+  const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!text) return 0;
+  return text.split(/\s+/).filter(Boolean).length;
+}
 
 export default function AdminBlogTulisPage() {
   const router = useRouter();
@@ -20,12 +30,18 @@ export default function AdminBlogTulisPage() {
   const [slug, setSlug] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [image, setImage] = useState('');
+  const [imageError, setImageError] = useState(false);
   const [category, setCategory] = useState('Tips Travel');
   const [status, setStatus] = useState('draft');
-  const [readTime, setReadTime] = useState('5 menit');
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [notification, setNotification] = useState('');
+  const [wordCount, setWordCount] = useState(0);
+
+  const computedReadTime = useMemo(() => {
+    const minutes = Math.max(1, Math.ceil(wordCount / 200));
+    return `${minutes} menit`;
+  }, [wordCount]);
 
   const editor = useEditor({
     extensions: [
@@ -35,12 +51,21 @@ export default function AdminBlogTulisPage() {
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Underline,
       Placeholder.configure({ placeholder: 'Mulai menulis artikel...' }),
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableCell,
+      TableHeader,
     ],
     content: '',
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose-base max-w-none focus:outline-none min-h-[400px] px-6 py-4',
+        class: 'prose prose-sm sm:prose-base max-w-none focus:outline-none min-h-[500px] px-6 py-4',
       },
+    },
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      const count = countWords(html);
+      setWordCount(count);
     },
   });
 
@@ -55,9 +80,9 @@ export default function AdminBlogTulisPage() {
           setImage(data.image || '');
           setCategory(data.category || 'Tips Travel');
           setStatus(data.status || 'draft');
-          setReadTime(data.read_time || '5 menit');
           if (editor && data.content) {
             editor.commands.setContent(data.content);
+            setWordCount(countWords(data.content));
           }
         }
       });
@@ -75,13 +100,13 @@ export default function AdminBlogTulisPage() {
   const autoSave = useCallback(async () => {
     if (!title || !editor) return;
     const content = editor.getHTML();
-    const payload = { title, slug, excerpt, content, image, category, status, read_time: readTime, updated_at: new Date().toISOString() };
+    const payload = { title, slug, excerpt, content, image, category, status, read_time: computedReadTime, updated_at: new Date().toISOString() };
 
     if (editId) {
       await supabase.from('blog_posts').update(payload).eq('id', editId);
     }
     setLastSaved(new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
-  }, [title, slug, excerpt, image, category, status, readTime, editor, editId]);
+  }, [title, slug, excerpt, image, category, status, computedReadTime, editor, editId]);
 
   useEffect(() => {
     const interval = setInterval(autoSave, 30000);
@@ -94,7 +119,7 @@ export default function AdminBlogTulisPage() {
 
     const content = editor?.getHTML() || '';
     const finalSlug = slug || title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    const payload = { title, slug: finalSlug, excerpt, content, image, category, status: publishStatus, read_time: readTime, updated_at: new Date().toISOString() };
+    const payload = { title, slug: finalSlug, excerpt, content, image, category, status: publishStatus, read_time: computedReadTime, updated_at: new Date().toISOString() };
 
     if (editId) {
       await supabase.from('blog_posts').update(payload).eq('id', editId);
@@ -167,8 +192,12 @@ export default function AdminBlogTulisPage() {
           {editor && <EditorToolbar editor={editor} />}
 
           {/* Editor */}
-          <div className="mt-2 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="relative mt-2 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <EditorContent editor={editor} />
+            {/* Word Counter */}
+            <div className="absolute bottom-2 right-3 rounded bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500">
+              {wordCount} kata
+            </div>
           </div>
         </div>
 
@@ -177,8 +206,33 @@ export default function AdminBlogTulisPage() {
           {/* Thumbnail */}
           <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
             <h3 className="text-xs font-bold text-gray-900">Thumbnail</h3>
-            {image && <img src={image} alt="" className="mt-2 h-32 w-full rounded-lg object-cover" />}
-            <input type="url" value={image} onChange={(e) => setImage(e.target.value)} placeholder="URL gambar thumbnail" className="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2 text-xs focus:border-blue-500 focus:outline-none" />
+            <input
+              type="url"
+              value={image}
+              onChange={(e) => { setImage(e.target.value); setImageError(false); }}
+              placeholder="URL gambar thumbnail (Cloudinary)"
+              className="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2 text-xs focus:border-blue-500 focus:outline-none"
+            />
+            {/* Thumbnail Preview */}
+            <div className="mt-2 h-32 w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
+              {image && !imageError ? (
+                <img
+                  src={image}
+                  alt="Preview thumbnail"
+                  className="h-full w-full object-cover"
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-gray-100">
+                  <div className="text-center">
+                    <svg className="mx-auto h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" />
+                    </svg>
+                    <p className="mt-1 text-[10px] text-gray-400">{image ? 'Gambar tidak valid' : 'Preview thumbnail'}</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Settings */}
@@ -202,7 +256,9 @@ export default function AdminBlogTulisPage() {
             </div>
             <div>
               <label className="text-[11px] font-medium text-gray-600">Waktu Baca</label>
-              <input type="text" value={readTime} onChange={(e) => setReadTime(e.target.value)} className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none" />
+              <div className="mt-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs text-gray-600">
+                {computedReadTime} <span className="text-gray-400">(otomatis)</span>
+              </div>
             </div>
           </div>
         </div>
@@ -214,7 +270,7 @@ export default function AdminBlogTulisPage() {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function EditorToolbar({ editor }: { editor: any }) {
   const addImage = () => {
-    const url = prompt('URL gambar:');
+    const url = prompt('URL gambar (Cloudinary):');
     if (url) editor.chain().focus().setImage({ src: url }).run();
   };
 
@@ -223,11 +279,18 @@ function EditorToolbar({ editor }: { editor: any }) {
     if (url) editor.chain().focus().setLink({ href: url }).run();
   };
 
+  const insertTable = () => {
+    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  };
+
   const btn = (active: boolean) => `rounded p-1.5 transition-colors ${active ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`;
 
   return (
     <div className="mt-4 flex flex-wrap items-center gap-0.5 rounded-t-xl border border-b-0 border-gray-200 bg-gray-50 px-2 py-1.5">
       {/* Headings */}
+      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={btn(editor.isActive('heading', { level: 1 }))} title="H1">
+        <span className="text-xs font-bold">H1</span>
+      </button>
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={btn(editor.isActive('heading', { level: 2 }))} title="H2">
         <span className="text-xs font-bold">H2</span>
       </button>
@@ -260,6 +323,15 @@ function EditorToolbar({ editor }: { editor: any }) {
       </button>
       <div className="mx-1 h-4 w-px bg-gray-300" />
 
+      {/* Horizontal Rule & Table */}
+      <button type="button" onClick={() => editor.chain().focus().setHorizontalRule().run()} className={btn(false)} title="Horizontal Line">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5" /></svg>
+      </button>
+      <button type="button" onClick={insertTable} className={btn(false)} title="Insert Table">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M10.875 12h2.25m-2.25 0c-.621 0-1.125.504-1.125 1.125M12 12c.621 0 1.125.504 1.125 1.125m-2.25 0v1.5c0 .621.504 1.125 1.125 1.125m0-3.75c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125" /></svg>
+      </button>
+      <div className="mx-1 h-4 w-px bg-gray-300" />
+
       {/* Align */}
       <button type="button" onClick={() => editor.chain().focus().setTextAlign('left').run()} className={btn(editor.isActive({ textAlign: 'left' }))} title="Align Left">
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h10.5m-10.5 5.25h16.5" /></svg>
@@ -270,7 +342,7 @@ function EditorToolbar({ editor }: { editor: any }) {
       <div className="mx-1 h-4 w-px bg-gray-300" />
 
       {/* Insert */}
-      <button type="button" onClick={addImage} className={btn(false)} title="Insert Image">
+      <button type="button" onClick={addImage} className={btn(false)} title="Insert Image (Cloudinary URL)">
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
       </button>
       <button type="button" onClick={addLink} className={btn(editor.isActive('link'))} title="Insert Link">

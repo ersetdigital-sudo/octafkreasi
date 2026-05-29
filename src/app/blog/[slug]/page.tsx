@@ -1,130 +1,124 @@
-import React from 'react';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
+﻿'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { getBlogBySlug, getAllBlogSlugs, blogPosts } from '@/data/blog';
-import { BlogArticleClient } from '@/components/sections/BlogArticleClient';
+import { supabase } from '@/lib/supabase';
 
-interface BlogDetailPageProps {
-  params: Promise<{ slug: string }>;
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  author: string;
+  category: string;
+  status: string;
+  created_at: string;
 }
 
-export function generateStaticParams() {
-  const slugs = getAllBlogSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+export default function BlogDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const { slug } = await params;
-  const post = getBlogBySlug(slug);
+  useEffect(() => {
+    if (!slug) return;
+    supabase.from('blog_posts').select('*').eq('slug', slug).eq('status', 'published').single()
+      .then(({ data, error }) => {
+        if (error || !data) setNotFound(true);
+        else setPost(data as BlogPost);
+        setLoading(false);
+      });
+  }, [slug]);
 
-  if (!post) {
-    notFound();
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="flex items-center justify-center py-20">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+        </div>
+      </div>
+    );
   }
 
-  // Get related posts (same category, exclude current)
-  const relatedPosts = blogPosts
-    .filter((p) => p.category === post.category && p.id !== post.id)
-    .slice(0, 3);
-
-  // Extract headings for TOC
-  const headings = post.content
-    .split('\n\n')
-    .filter((block) => block.startsWith('## ') || block.startsWith('### '))
-    .map((block, index) => {
-      const level = block.startsWith('### ') ? 3 : 2;
-      const text = block.replace(/^#{2,3}\s/, '');
-      const id = `section-${index}`;
-      return { id, text, level };
-    });
-
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.excerpt,
-    image: post.image,
-    url: `https://octafkreasi.com/blog/${post.slug}`,
-    datePublished: post.date,
-    dateModified: post.date,
-    author: {
-      '@type': 'Organization',
-      name: post.author,
-      url: 'https://octafkreasi.com',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'octafkreasi',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://octafkreasi.com/favicon.svg',
-      },
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://octafkreasi.com/blog/${post.slug}`,
-    },
-  };
+  if (notFound || !post) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <main className="container-app py-16 text-center">
+          <h1 className="text-2xl font-bold text-gray-900">Artikel Tidak Ditemukan</h1>
+          <p className="mt-2 text-gray-500">Artikel yang Anda cari tidak tersedia.</p>
+          <Link href="/blog" className="mt-6 inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+            ← Kembali ke Blog
+          </Link>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative h-[350px] md:h-[450px] lg:h-[500px]">
-        <Image
-          src={post.image}
-          alt={post.imageAlt}
-          fill
-          sizes="100vw"
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+      <main className="container-app py-8 md:py-12">
+        {/* Breadcrumb */}
+        <nav className="mb-6">
+          <ol className="flex items-center gap-1.5 text-xs text-gray-500">
+            <li><Link href="/" className="hover:text-blue-600">Beranda</Link></li>
+            <li><svg className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg></li>
+            <li><Link href="/blog" className="hover:text-blue-600">Blog</Link></li>
+            <li><svg className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg></li>
+            <li className="font-medium text-gray-800 truncate max-w-[200px]">{post.title}</li>
+          </ol>
+        </nav>
 
-        {/* Hero Content */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-8 md:px-8 lg:pb-12">
-          <div className="mx-auto max-w-[720px]">
-            <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
-              {post.category}
-            </span>
-            <h1 className="mt-3 font-heading text-2xl font-bold leading-tight text-white md:text-4xl lg:text-5xl">
-              {post.title}
-            </h1>
-            <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-white/80">
-              <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>
-                {post.author}
+        <article className="mx-auto max-w-3xl">
+          {/* Header */}
+          <div className="mb-8">
+            {post.category && (
+              <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-600 mb-3">
+                {post.category}
               </span>
-              <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                </svg>
-                {post.date}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                {post.readTime} baca
-              </span>
+            )}
+            <h1 className="text-3xl font-extrabold text-gray-900 md:text-4xl leading-tight">{post.title}</h1>
+            <div className="mt-4 flex items-center gap-3 text-sm text-gray-500">
+              <span>{post.author || 'Tim Octafkreasi'}</span>
+              <span>·</span>
+              <span>{new Date(post.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             </div>
           </div>
-        </div>
-      </section>
 
-      <BlogArticleClient
-        post={post}
-        headings={headings}
-        relatedPosts={relatedPosts}
-      />
+          {/* Featured Image */}
+          {post.image && (
+            <div className="mb-8 overflow-hidden rounded-2xl">
+              <img src={post.image} alt={post.title} className="w-full h-auto object-cover" />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="prose prose-lg prose-gray max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+
+          {/* Back */}
+          <div className="mt-12 border-t border-gray-100 pt-8">
+            <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+              Kembali ke Blog
+            </Link>
+          </div>
+        </article>
+      </main>
 
       <Footer />
     </div>

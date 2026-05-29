@@ -22,7 +22,7 @@ export function StarRating({ rating, size = 'md', className }: StarRatingProps) 
     <div
       className={cn('inline-flex items-center gap-0.5', className)}
       role="img"
-      aria-label={`Rating ${rating} dari 5 bintang`}
+      aria-label={`Rating ${rating.toFixed(1)} dari 5 bintang`}
     >
       {stars.map((star) => (
         <svg

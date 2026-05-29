@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
@@ -24,7 +24,7 @@ export default function PrivasiPage() {
               <section>
                 <h2 className="text-xl font-bold text-gray-900">1. Pendahuluan</h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Selamat datang di octafkreasi. Kami berkomitmen untuk melindungi privasi dan keamanan data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi Anda saat menggunakan layanan kami. Dengan mengakses atau menggunakan platform octafkreasi, Anda menyetujui praktik yang dijelaskan dalam kebijakan ini.
+                  Selamat datang di Octaf Kreasi. Kami berkomitmen untuk melindungi privasi dan keamanan data pribadi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi Anda saat menggunakan layanan kami. Dengan mengakses atau menggunakan platform Octaf Kreasi, Anda menyetujui praktik yang dijelaskan dalam kebijakan ini.
                 </p>
               </section>
 
@@ -85,7 +85,7 @@ export default function PrivasiPage() {
                   <li>Kepada mitra perjalanan (hotel, maskapai, operator tur) yang terkait langsung dengan pemesanan Anda</li>
                   <li>Kepada penyedia layanan pembayaran untuk memproses transaksi</li>
                   <li>Jika diwajibkan oleh hukum atau perintah pengadilan</li>
-                  <li>Untuk melindungi hak, keamanan, atau properti octafkreasi dan penggunanya</li>
+                  <li>Untuk melindungi hak, keamanan, atau properti Octaf Kreasi dan penggunanya</li>
                 </ul>
               </section>
 

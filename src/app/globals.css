@@ -117,3 +117,28 @@
   60% { opacity: 1; transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+
+/* Blog editor & public page table styles */
+.prose table {
+  @apply w-full border-collapse border border-gray-200;
+}
+.prose table th {
+  @apply border border-gray-200 bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-700;
+}
+.prose table td {
+  @apply border border-gray-200 px-4 py-2 text-sm text-gray-600;
+}
+
+/* TipTap editor table styles */
+.ProseMirror table {
+  @apply w-full border-collapse border border-gray-200;
+}
+.ProseMirror table th {
+  @apply border border-gray-200 bg-gray-50 px-4 py-2 text-left text-sm font-semibold text-gray-700;
+}
+.ProseMirror table td {
+  @apply border border-gray-200 px-4 py-2 text-sm text-gray-600;
+}
+.ProseMirror table .selectedCell {
+  @apply bg-blue-50;
+}

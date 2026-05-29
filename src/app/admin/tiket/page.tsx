@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
@@ -71,7 +71,7 @@ export default function AdminTiketPage() {
     if (!phone) { showToast(false, 'Nomor WhatsApp customer tidak tersedia'); return; }
     const peserta = `${ticket.adults} Dewasa${ticket.children > 0 ? `, ${ticket.children} Anak` : ''}`;
     const msg = encodeURIComponent(
-      `Halo ${ticket.customer_name || 'Pelanggan'}!\n\nBerikut e-tiket perjalanan Anda bersama Octafkreasi:\n\nDestinasi: ${ticket.destination_name}\nTanggal: ${ticket.date || '-'}\nKode Booking: ${ticket.booking_number}\nPeserta: ${peserta}\n\nTunjukkan kode booking ini saat check-in. Selamat menikmati perjalanan!\n\n- Tim Octafkreasi`
+      `Halo ${ticket.customer_name || 'Pelanggan'}!\n\nBerikut e-tiket perjalanan Anda bersama Octaf Kreasi:\n\nDestinasi: ${ticket.destination_name}\nTanggal: ${ticket.date || '-'}\nKode Booking: ${ticket.booking_number}\nPeserta: ${peserta}\n\nTunjukkan kode booking ini saat check-in. Selamat menikmati perjalanan!\n\n- Tim Octaf Kreasi`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };

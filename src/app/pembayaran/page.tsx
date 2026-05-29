@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useMemo, useEffect, useCallback, Suspense } from 'react';
 
@@ -15,10 +15,10 @@ import type { OrderDetails } from '@/types';
 type PaymentType = 'transfer-bank' | 'e-wallet';
 
 const bankAccounts = [
-  { name: 'BCA', accountNumber: '1234 5678 9101', accountName: 'PT octafkreasi Travel' },
-  { name: 'Mandiri', accountNumber: '1234 5678 9102', accountName: 'PT octafkreasi Travel' },
-  { name: 'BNI', accountNumber: '1234 5678 9103', accountName: 'PT octafkreasi Travel' },
-  { name: 'BRI', accountNumber: '1234 5678 9104', accountName: 'PT octafkreasi Travel' },
+  { name: 'BCA', accountNumber: '1234 5678 9101', accountName: 'PT Octaf Kreasi Travel' },
+  { name: 'Mandiri', accountNumber: '1234 5678 9102', accountName: 'PT Octaf Kreasi Travel' },
+  { name: 'BNI', accountNumber: '1234 5678 9103', accountName: 'PT Octaf Kreasi Travel' },
+  { name: 'BRI', accountNumber: '1234 5678 9104', accountName: 'PT Octaf Kreasi Travel' },
 ];
 
 const eWallets = [
@@ -159,6 +159,7 @@ function PembayaranContent() {
         total_price: stored?.total || 0,
         customer_name: user?.user_metadata?.full_name || '',
         customer_email: user?.email || '',
+        customer_phone: user?.user_metadata?.phone || user?.phone || '',
         addons: stored?.addons || [],
         payment_method: selectedMethod,
         status: 'pending',

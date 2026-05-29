@@ -1,5 +1,5 @@
-// =============================================================================
-// Type Definitions for octafkreasi Travel Booking Platform
+﻿// =============================================================================
+// Type Definitions for Octaf Kreasi Travel Booking Platform
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -124,6 +124,7 @@ export interface Destination {
   currency: 'IDR';
   tags: string[];
   isWishlisted: boolean;
+  badge?: string;
 }
 
 export interface DestinationQuickInfo {

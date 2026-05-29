@@ -23,9 +23,9 @@ const statusLabels: Record<string, { label: string; color: string; dot: string }
 };
 
 function getMemberStatus(count: number) {
-  if (count >= 10) return { label: 'Gold Traveler', icon: '✈️' };
-  if (count >= 3) return { label: 'Explorer', icon: '🌟' };
-  return { label: 'New Traveler', icon: '👋' };
+  if (count >= 10) return { label: 'Gold Traveler', icon: '??' };
+  if (count >= 3) return { label: 'Explorer', icon: '??' };
+  return { label: 'New Traveler', icon: '??' };
 }
 
 export default function AkunPage() {
@@ -88,7 +88,7 @@ export default function AkunPage() {
   const userAvatar = user.user_metadata?.avatar_url || '';
   const userInitial = userName.charAt(0).toUpperCase();
 
-  // ── Trip status logic ──────────────────────────────────────────────────────
+  // -- Trip status logic ------------------------------------------------------
   // Active = paid/confirmed (belum check-in, belum selesai)
   const activeOrders = orders.filter(o => o.status === 'paid' || o.status === 'confirmed');
   const upcomingTrip = activeOrders[0] ?? null;
@@ -96,7 +96,7 @@ export default function AkunPage() {
     ? destinations.find(d => d.slug === upcomingTrip.destination_slug)?.image ?? null
     : null;
 
-  // ── Stats ──────────────────────────────────────────────────────────────────
+  // -- Stats ------------------------------------------------------------------
   // Tiket Aktif = tiket yang belum check-in (bukan 'used', bukan 'cancelled')
   const activeTickets = checkedInTickets.filter(
     t => t.ticket_status !== 'used' && t.ticket_status !== 'cancelled' && t.ticket_status !== 'completed' && t.ticket_status !== 'checked_in'
@@ -116,11 +116,11 @@ export default function AkunPage() {
   // Member status berdasarkan total trip (completed + active)
   const memberStatus = getMemberStatus(totalTrips + activeOrders.length);
 
-  // ── Dynamic empty state messages ──────────────────────────────────────────
+  // -- Dynamic empty state messages ------------------------------------------
   const emptyHeroMessages = [
     { title: 'Siap untuk petualangan berikutnya?', sub: 'Temukan destinasi impianmu sekarang' },
     { title: 'Ke mana perjalananmu selanjutnya?', sub: 'Ratusan destinasi menunggumu' },
-    { title: 'Saatnya menjelajah lagi 👋', sub: 'Buat kenangan baru yang tak terlupakan' },
+    { title: 'Saatnya menjelajah lagi ??', sub: 'Buat kenangan baru yang tak terlupakan' },
   ];
   const heroMsg = emptyHeroMessages[Math.floor((orders.length) % emptyHeroMessages.length)];
 
@@ -146,7 +146,7 @@ export default function AkunPage() {
               )}
             </div>
             <div>
-              <p className="text-base font-bold text-slate-900 md:text-lg">Halo, {userName.split(' ')[0]} 👋</p>
+              <p className="text-base font-bold text-slate-900 md:text-lg">Halo, {userName.split(' ')[0]} ??</p>
               <p className="text-xs text-slate-400 md:text-sm">Ready for your next journey?</p>
             </div>
           </div>
@@ -162,14 +162,14 @@ export default function AkunPage() {
         {/* === HERO: UPCOMING TRIP or EMPTY TRAVEL STATE === */}
         <div className="mt-6 overflow-hidden rounded-[28px] shadow-2xl shadow-slate-900/20">
           <div className="relative min-h-[200px] bg-gradient-to-br from-[#0a1628] via-[#0f2040] to-[#1a3a6b] px-6 py-8 md:px-8 md:py-10">
-            {/* Background image — less dark overlay for more visibility */}
+            {/* Background image � less dark overlay for more visibility */}
             <img
               src={upcomingTripImage || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=85'}
               alt=""
               className="absolute inset-0 h-full w-full object-cover opacity-40"
               style={{ filter: 'blur(0px)' }}
             />
-            {/* Gradient overlay — lighter than before */}
+            {/* Gradient overlay � lighter than before */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628]/70 via-[#0f2040]/60 to-[#1a3a6b]/65" />
             {/* Noise texture */}
             <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.65%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27/%3E%3C/svg%3E")' }} />
@@ -190,7 +190,7 @@ export default function AkunPage() {
                         ? 'bg-blue-400/15 text-blue-200 ring-blue-400/25'
                         : 'bg-emerald-400/15 text-emerald-200 ring-emerald-400/25'
                     }`}>
-                      {upcomingTrip.status === 'confirmed' ? '✓ Dikonfirmasi' : '✓ Lunas'}
+                      {upcomingTrip.status === 'confirmed' ? '? Dikonfirmasi' : '? Lunas'}
                     </span>
                   </div>
                   <h3 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl" style={{ lineHeight: 1.15 }}>{upcomingTrip.destination_name}</h3>
@@ -239,19 +239,19 @@ export default function AkunPage() {
         {/* === STATS CARDS === */}
         <div className="mt-5 grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-3">
           <div className="rounded-2xl bg-white p-3.5 md:p-4 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EFF6FF, #EEF2FF)' }}>🎫</div>
+            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EFF6FF, #EEF2FF)' }}>??</div>
             <p className="mt-2.5 text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">{activeTickets}</p>
             <p className="mt-0.5 text-[10px] md:text-[11px] font-semibold text-slate-500">Tiket Aktif</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-slate-300 whitespace-nowrap">{activeTickets === 0 ? 'Tidak ada trip aktif' : `${activeTickets} trip menunggu`}</p>
           </div>
           <div className="rounded-2xl bg-white p-3.5 md:p-4 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EEF2FF, #F5F3FF)' }}>✈️</div>
+            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EEF2FF, #F5F3FF)' }}>??</div>
             <p className="mt-2.5 text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">{totalTrips}</p>
             <p className="mt-0.5 text-[10px] md:text-[11px] font-semibold text-slate-500">Total Trip</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-slate-300 whitespace-nowrap">{totalTrips === 0 ? 'Belum ada trip selesai' : `+${totalTrips} selesai`}</p>
           </div>
           <div className="rounded-2xl bg-white p-3.5 md:p-4 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #ECFDF5, #F0FDFA)' }}>🌍</div>
+            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #ECFDF5, #F0FDFA)' }}>??</div>
             <p className="mt-2.5 text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">{citiesVisited}</p>
             <p className="mt-0.5 text-[10px] md:text-[11px] font-semibold text-slate-500">Kota Dikunjungi</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-slate-300 whitespace-nowrap">{citiesVisited === 0 ? 'Jelajahi Indonesia' : 'Indonesia'}</p>
@@ -264,7 +264,7 @@ export default function AkunPage() {
           </div>
         </div>
 
-        {/* === E-TICKET QUICK ACCESS — Compact === */}
+        {/* === E-TICKET QUICK ACCESS � Compact === */}
         {activeTickets > 0 && (
           <Link href="/akun/tiket"
             className="group mt-5 flex items-center justify-between rounded-2xl bg-gradient-to-r from-[#1e3a6b] to-[#3b5998] px-5 py-3.5 shadow-md shadow-blue-900/10 ring-1 ring-white/5 transition-all hover:shadow-lg hover:shadow-blue-900/15 hover:-translate-y-0.5">
@@ -285,7 +285,7 @@ export default function AkunPage() {
           </Link>
         )}
 
-        {/* === TAB NAVIGATION — Modern Floating === */}
+        {/* === TAB NAVIGATION � Modern Floating === */}
         <div className="mt-8 rounded-2xl bg-white shadow-sm ring-1 ring-slate-900/[0.04]">
           <div className="border-b border-slate-100/80 px-1.5 pt-1.5">
             <div className="flex gap-1">
@@ -318,12 +318,13 @@ export default function AkunPage() {
         <div className="container-app py-5">
           <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
             <Link href="/" className="flex items-center gap-2">
-              <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-7 w-auto" />
+              <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png,w_120,q_auto,f_auto/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-7 w-auto" />
+              <span className="text-sm font-bold text-slate-700">Octaf <span className="text-[#2563FF]">Kreasi</span></span>
             </Link>
             <div className="flex items-center gap-4">
               <Link href="/bantuan" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">Bantuan</Link>
               <Link href="/privasi" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">Privasi</Link>
-              <span className="text-xs text-slate-300">© 2025 octafkreasi</span>
+              <span className="text-xs text-slate-300">� 2025 Octaf Kreasi</span>
             </div>
           </div>
         </div>
@@ -364,7 +365,7 @@ function TabOverview({ orders }: { orders: Order[] }) {
     <div>
       <p className="text-sm font-bold text-slate-800 mb-4">Riwayat Perjalanan</p>
 
-      {/* Desktop layout — luxury horizontal cards */}
+      {/* Desktop layout � luxury horizontal cards */}
       <div className="hidden sm:block space-y-2.5">
         {recentOrders.map((order) => {
           const status = statusLabels[order.status] || statusLabels.pending;
@@ -372,7 +373,7 @@ function TabOverview({ orders }: { orders: Order[] }) {
           return (
             <Link key={order.id} href={`/akun/pesanan/${order.id}`}
               className="group flex items-center gap-4 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-slate-200">
-              {/* Thumbnail — cinematic */}
+              {/* Thumbnail � cinematic */}
               <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-xl">
                 <img src={thumb} alt={order.destination_name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
@@ -408,7 +409,7 @@ function TabOverview({ orders }: { orders: Order[] }) {
         })}
       </div>
 
-      {/* Mobile layout — luxury stacked cards */}
+      {/* Mobile layout � luxury stacked cards */}
       <div className="sm:hidden space-y-3">
         {recentOrders.map((order) => {
           const status = statusLabels[order.status] || statusLabels.pending;
@@ -592,8 +593,8 @@ function ReviewBottomSheet({ order, existingReview, onClose, onSaved }: {
 
   const headings = [
     `Bagaimana pengalamanmu di ${order.destination_name}?`,
-    `Ceritakan perjalananmu ke ${order.destination_name} ✨`,
-    `Gimana seru-nya di ${order.destination_name}? 🌟`,
+    `Ceritakan perjalananmu ke ${order.destination_name} ?`,
+    `Gimana seru-nya di ${order.destination_name}? ??`,
   ];
   const heading = headings[order.id.charCodeAt(0) % headings.length];
 
@@ -619,7 +620,7 @@ function ReviewBottomSheet({ order, existingReview, onClose, onSaved }: {
             </div>
             <p className="mt-4 text-lg font-bold text-slate-800">Ulasan Terkirim!</p>
             <p className="mt-2 text-sm text-slate-400 leading-relaxed">
-              Terima kasih telah membagikan pengalaman perjalananmu ✨
+              Terima kasih telah membagikan pengalaman perjalananmu ?
             </p>
           </div>
         ) : (
@@ -657,7 +658,7 @@ function ReviewBottomSheet({ order, existingReview, onClose, onSaved }: {
               />
               <div className="mt-1.5 flex items-center justify-between">
                 <p className={`text-xs ${content.length < 20 ? 'text-slate-300' : 'text-emerald-500'}`}>
-                  {content.length < 20 ? `Minimal ${20 - content.length} karakter lagi` : '✓ Cukup'}
+                  {content.length < 20 ? `Minimal ${20 - content.length} karakter lagi` : '? Cukup'}
                 </p>
                 <p className="text-xs text-slate-300">{content.length}/500</p>
               </div>
@@ -726,7 +727,7 @@ function TabUlasan({ reviews, orders, onReviewSaved }: {
     <>
       <div className="space-y-3">
         {completedOrders.map((order) => {
-          // Match review by destination_slug via destination_id lookup — fallback by order position
+          // Match review by destination_slug via destination_id lookup � fallback by order position
           const review = reviews[completedOrders.indexOf(order)] ?? null;
           const thumb = DEST_IMAGES[order.destination_slug] || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=80';
 
@@ -816,7 +817,12 @@ function EditProfileModal({ user, onClose, onSaved }: { user: { user_metadata?: 
 
   const handleSave = async () => {
     setSaving(true);
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
     await supabase.auth.updateUser({ data: { full_name: fullName, phone } });
+    // Sync to profiles table
+    if (currentUser) {
+      await supabase.from('profiles').update({ full_name: fullName, phone }).eq('id', currentUser.id);
+    }
     setSaving(false);
     onSaved();
     onClose();

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { WishlistProvider } from "@/lib/wishlist-context";
@@ -17,9 +17,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Octafkreasi - Jasa Tour Travel Terpercaya di Indonesia",
+  title: "Octaf Kreasi - Jasa Tour Travel Terpercaya di Indonesia",
   description:
-    "Octafkreasi adalah jasa tour travel terpercaya di Indonesia. Temukan paket wisata terbaik ke Raja Ampat, Bali, Labuan Bajo, dan destinasi impian lainnya dengan harga terjangkau. Pesan sekarang!",
+    "Octaf Kreasi adalah jasa tour travel terpercaya di Indonesia. Temukan paket wisata terbaik ke Raja Ampat, Bali, Labuan Bajo, dan destinasi impian lainnya dengan harga terjangkau. Pesan sekarang!",
+  verification: {
+    google: "UAKKr7Ot_dRBORdeolPK-SYjihLsgsDQXTlmW5JHy6o",
+  },
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -33,18 +36,18 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Octafkreasi - Jasa Tour Travel Terpercaya di Indonesia",
+    title: "Octaf Kreasi - Jasa Tour Travel Terpercaya di Indonesia",
     description: "Temukan paket wisata terbaik ke Raja Ampat, Bali, Labuan Bajo, dan destinasi impian lainnya dengan harga terjangkau.",
     type: "website",
     locale: "id_ID",
-    siteName: "Octafkreasi",
+    siteName: "Octaf Kreasi",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Octafkreasi - Jasa Tour Travel Terpercaya di Indonesia",
+    title: "Octaf Kreasi - Jasa Tour Travel Terpercaya di Indonesia",
     description: "Temukan paket wisata terbaik ke Raja Ampat, Bali, Labuan Bajo, dan destinasi impian lainnya dengan harga terjangkau.",
   },
-  keywords: ["jasa tour travel terpercaya", "jasa tour travel Indonesia", "paket wisata Indonesia", "tour travel murah", "octafkreasi"],
+  keywords: ["jasa tour travel terpercaya", "jasa tour travel Indonesia", "paket wisata Indonesia", "tour travel murah", "Octaf Kreasi"],
 };
 
 export default function RootLayout({

@@ -43,11 +43,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/admin/login'); return; }
 
-      const { data: profile } = await supabase
+      let { data: profile } = await supabase
         .from('profiles')
         .select('role, full_name')
         .eq('id', user.id)
         .single();
+
+      // Auto-create profile if not exists
+      if (!profile) {
+        const { data: newProfile } = await supabase
+          .from('profiles')
+          .insert({ id: user.id, full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User', role: 'user' })
+          .select('role, full_name')
+          .single();
+        profile = newProfile;
+      }
 
       if (!profile || profile.role !== 'admin') { router.push('/admin/login'); return; }
 
@@ -82,10 +92,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 flex w-[260px] transform flex-col bg-white border-r border-gray-200 transition-transform lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 flex w-[260px] transform flex-col bg-white border-r border-gray-200 transition-transform lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo */}
         <div className="flex h-16 items-center gap-2.5 border-b border-gray-100 px-5">
-          <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-8 w-auto" />
+          <img src="https://res.cloudinary.com/dqjh7utdb/image/upload/e_background_removal/f_png,w_120,q_auto,f_auto/v1779950494/owbbuyhkedcppgjiaeyo.jpg" alt="Octaf Kreasi" className="h-8 w-auto" />
           <span className="text-sm font-bold text-gray-900">octaf<span className="text-blue-600">kreasi</span></span>
           <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-bold text-blue-600">ADMIN</span>
         </div>
@@ -130,7 +140,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main */}
-      <div className="flex flex-1 flex-col min-w-0">
+      <div className="flex flex-1 flex-col min-w-0 lg:ml-[260px]">
         {/* Header */}
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white/80 px-4 backdrop-blur-sm lg:px-6">
           <button

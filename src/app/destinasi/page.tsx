@@ -31,12 +31,13 @@ export default function DestinasiPage() {
         slug: d.slug,
         image: d.image || '',
         imageAlt: d.image_alt || d.name,
-        rating: d.rating || 4.5,
+        rating: d.review_count > 0 ? (d.rating || 0) : 0,
         reviewCount: d.review_count || 0,
         priceStartFrom: d.price_start_from || 0,
         currency: 'IDR' as const,
         tags: [d.category || 'alam'],
         isWishlisted: false,
+        badge: d.badge || '',
       }));
       setDestinations(mapped);
     }
@@ -102,6 +103,7 @@ export default function DestinasiPage() {
                 <DestinationCard
                   key={destination.id}
                   destination={destination}
+                  badge={destination.badge ? ({'best-seller': 'BEST SELLER', 'populer': 'POPULER', 'baru': 'BARU'}[destination.badge] || '') : undefined}
                   className="w-full"
                 />
               ))}

@@ -57,3 +57,19 @@ export function calculateStars(rating: number): StarDisplay[] {
 
   return stars;
 }
+
+/**
+ * Format a rating number to 1 decimal place.
+ * Ensures consistent display across the site.
+ *
+ * @param rating - Rating value (e.g. 4.6666666667)
+ * @returns Formatted string with 1 decimal (e.g. "4.7")
+ *
+ * @example
+ * formatRating(4.6666666667) // "4.7"
+ * formatRating(4.5)          // "4.5"
+ * formatRating(4)            // "4.0"
+ */
+export function formatRating(rating: number): string {
+  return rating.toFixed(1);
+}

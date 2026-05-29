@@ -177,6 +177,7 @@ function DestinationForm({ destination, onSave, onClose }: { destination: Destin
     price_start_from: destination?.price_start_from || 0,
     duration: destination?.duration || '',
     category: destination?.category || 'alam',
+    badge: (destination as unknown as Record<string, string>)?.badge || '',
     best_time: destination?.best_time || '',
     language: destination?.language || 'Indonesia',
     currency: destination?.currency || 'IDR',
@@ -263,6 +264,15 @@ function DestinationForm({ destination, onSave, onClose }: { destination: Destin
                   <option value="gunung">Gunung</option>
                   <option value="budaya">Budaya</option>
                   <option value="diving">Diving</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-700">Badge</label>
+                <select value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })} className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+                  <option value="">Tanpa Badge</option>
+                  <option value="best-seller">Best Seller</option>
+                  <option value="populer">Populer</option>
+                  <option value="baru">Baru</option>
                 </select>
               </div>
             </div>

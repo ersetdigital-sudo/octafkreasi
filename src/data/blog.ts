@@ -1,4 +1,4 @@
-export interface BlogPost {
+﻿export interface BlogPost {
   id: string;
   slug: string;
   title: string;
@@ -54,7 +54,7 @@ Dari Jakarta atau kota besar lainnya, kamu perlu terbang ke Sorong (SOQ). Dari S
     image: 'https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?w=800&q=80',
     imageAlt: 'Perairan turquoise Raja Ampat dengan pulau-pulau karst',
     category: 'Destinasi',
-    author: 'Tim octafkreasi',
+    author: 'Tim Octaf Kreasi',
     date: '2025-05-15',
     readTime: '8 menit',
   },
@@ -107,7 +107,7 @@ Itinerary yang terencana menghindari pengeluaran impulsif dan transportasi bolak
     image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80',
     imageAlt: 'Traveler dengan backpack menikmati pemandangan alam',
     category: 'Tips Travel',
-    author: 'Tim octafkreasi',
+    author: 'Tim Octaf Kreasi',
     date: '2025-05-10',
     readTime: '6 menit',
   },
@@ -157,7 +157,7 @@ Musim kemarau (April-Oktober) adalah waktu terbaik karena langit lebih cerah. Hi
     image: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=800&q=80',
     imageAlt: 'Sunrise spektakuler di Gunung Bromo dengan lautan kabut',
     category: 'Destinasi',
-    author: 'Tim octafkreasi',
+    author: 'Tim Octaf Kreasi',
     date: '2025-04-28',
     readTime: '7 menit',
   },
@@ -219,7 +219,7 @@ Musim kemarau (April-Oktober) adalah waktu terbaik karena langit lebih cerah. Hi
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
     imageAlt: 'Pantai tropis dengan pasir putih dan air jernih',
     category: 'Tips Travel',
-    author: 'Tim octafkreasi',
+    author: 'Tim Octaf Kreasi',
     date: '2025-04-20',
     readTime: '5 menit',
   },
@@ -271,7 +271,7 @@ Gua dengan kolam air asin di dalamnya. Cahaya matahari yang masuk menciptakan ef
     image: 'https://images.unsplash.com/photo-1571366343168-631c5bcca7a4?w=800&q=80',
     imageAlt: 'Pemandangan Labuan Bajo dengan pulau-pulau di kejauhan',
     category: 'Destinasi',
-    author: 'Tim octafkreasi',
+    author: 'Tim Octaf Kreasi',
     date: '2025-04-12',
     readTime: '9 menit',
   },
@@ -326,7 +326,7 @@ Berpakaian tidak sopan di tempat ibadah, memotret tanpa izin, atau bersikap tida
     image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80',
     imageAlt: 'Traveler melihat peta di tengah perjalanan',
     category: 'Tips Travel',
-    author: 'Tim octafkreasi',
+    author: 'Tim Octaf Kreasi',
     date: '2025-03-30',
     readTime: '6 menit',
   },

@@ -46,15 +46,40 @@ export default function AdminUlasanPage() {
     setTimeout(() => setNotification(null), 3000);
   };
 
+  // Sinkronisasi rating destinasi setelah review diubah
+  const syncDestinationRating = async (destinationId: string) => {
+    if (!destinationId) return;
+    const { data: approvedReviews } = await supabase
+      .from('reviews')
+      .select('rating')
+      .eq('destination_id', destinationId)
+      .eq('status', 'approved');
+
+    const reviews = approvedReviews || [];
+    const avgRating = reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0;
+
+    await supabase.from('destinations').update({
+      rating: Math.round(avgRating * 10) / 10,
+      review_count: reviews.length,
+    }).eq('id', destinationId);
+  };
+
   const updateStatus = async (id: string, status: string) => {
+    // Cari destination_id dari review ini
+    const review = reviews.find(r => r.id === id);
     await supabase.from('reviews').update({ status }).eq('id', id);
+    if (review?.destination_id) await syncDestinationRating(review.destination_id);
     showNotif('success', `Ulasan ${status === 'approved' ? 'disetujui' : 'ditolak'}`);
     loadData();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Hapus ulasan ini?')) return;
+    const review = reviews.find(r => r.id === id);
     await supabase.from('reviews').delete().eq('id', id);
+    if (review?.destination_id) await syncDestinationRating(review.destination_id);
     showNotif('success', 'Ulasan dihapus');
     loadData();
   };

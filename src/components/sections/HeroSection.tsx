@@ -1,15 +1,17 @@
-import React from 'react';
+﻿import React from 'react';
+import Image from 'next/image';
 
 export function HeroSection() {
   return (
     <section className="relative min-h-[600px] w-full overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            'url(https://res.cloudinary.com/dqjh7utdb/image/upload/v1779769292/k7q6qdumq11ce4olu8ai.png)',
-        }}
+      {/* Background Image — optimized with next/image */}
+      <Image
+        src="https://res.cloudinary.com/dqjh7utdb/image/upload/v1779769292/k7q6qdumq11ce4olu8ai.png"
+        alt="Pemandangan alam Indonesia"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
       />
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/50" />
@@ -25,7 +27,7 @@ export function HeroSection() {
         <h1 className="max-w-3xl font-heading text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
           Jelajahi keindahan Indonesia{' '}
           <em className="not-italic font-light italic">bersama</em>{' '}
-          octafkreasi
+          Octaf Kreasi
         </h1>
 
         {/* Subtitle */}

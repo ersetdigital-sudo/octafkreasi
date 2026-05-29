@@ -8,6 +8,9 @@ export interface OrderData {
   adults: number;
   children: number;
   total_price: number;
+  customer_name?: string;
+  customer_email?: string;
+  customer_phone?: string;
 }
 
 export interface Order {
@@ -39,6 +42,9 @@ export async function createOrder(order: OrderData): Promise<{ success: boolean;
       adults: order.adults,
       children: order.children,
       total_price: order.total_price,
+      customer_name: order.customer_name || null,
+      customer_email: order.customer_email || null,
+      customer_phone: order.customer_phone || null,
       status: 'pending',
     })
     .select('id')
