@@ -23,9 +23,9 @@ const statusLabels: Record<string, { label: string; color: string; dot: string }
 };
 
 function getMemberStatus(count: number) {
-  if (count >= 10) return { label: 'Gold Traveler', icon: '??' };
-  if (count >= 3) return { label: 'Explorer', icon: '??' };
-  return { label: 'New Traveler', icon: '??' };
+  if (count >= 10) return { label: 'Gold Traveler', icon: '🏆' };
+  if (count >= 3) return { label: 'Explorer', icon: '🧭' };
+  return { label: 'New Traveler', icon: '✈️' };
 }
 
 export default function AkunPage() {
@@ -120,7 +120,7 @@ export default function AkunPage() {
   const emptyHeroMessages = [
     { title: 'Siap untuk petualangan berikutnya?', sub: 'Temukan destinasi impianmu sekarang' },
     { title: 'Ke mana perjalananmu selanjutnya?', sub: 'Ratusan destinasi menunggumu' },
-    { title: 'Saatnya menjelajah lagi ??', sub: 'Buat kenangan baru yang tak terlupakan' },
+    { title: 'Saatnya menjelajah lagi 🌏', sub: 'Buat kenangan baru yang tak terlupakan' },
   ];
   const heroMsg = emptyHeroMessages[Math.floor((orders.length) % emptyHeroMessages.length)];
 
@@ -146,7 +146,7 @@ export default function AkunPage() {
               )}
             </div>
             <div>
-              <p className="text-base font-bold text-slate-900 md:text-lg">Halo, {userName.split(' ')[0]} ??</p>
+              <p className="text-base font-bold text-slate-900 md:text-lg">Halo, {userName.split(' ')[0]} 👋</p>
               <p className="text-xs text-slate-400 md:text-sm">Ready for your next journey?</p>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function AkunPage() {
                         ? 'bg-blue-400/15 text-blue-200 ring-blue-400/25'
                         : 'bg-emerald-400/15 text-emerald-200 ring-emerald-400/25'
                     }`}>
-                      {upcomingTrip.status === 'confirmed' ? '? Dikonfirmasi' : '? Lunas'}
+                      {upcomingTrip.status === 'confirmed' ? '✅ Dikonfirmasi' : '💰 Lunas'}
                     </span>
                   </div>
                   <h3 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl" style={{ lineHeight: 1.15 }}>{upcomingTrip.destination_name}</h3>
@@ -239,19 +239,19 @@ export default function AkunPage() {
         {/* === STATS CARDS === */}
         <div className="mt-5 grid grid-cols-2 gap-2.5 md:grid-cols-4 md:gap-3">
           <div className="rounded-2xl bg-white p-3.5 md:p-4 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EFF6FF, #EEF2FF)' }}>??</div>
+            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EFF6FF, #EEF2FF)' }}>🎫</div>
             <p className="mt-2.5 text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">{activeTickets}</p>
             <p className="mt-0.5 text-[10px] md:text-[11px] font-semibold text-slate-500">Tiket Aktif</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-slate-300 whitespace-nowrap">{activeTickets === 0 ? 'Tidak ada trip aktif' : `${activeTickets} trip menunggu`}</p>
           </div>
           <div className="rounded-2xl bg-white p-3.5 md:p-4 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EEF2FF, #F5F3FF)' }}>??</div>
+            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #EEF2FF, #F5F3FF)' }}>🗺️</div>
             <p className="mt-2.5 text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">{totalTrips}</p>
             <p className="mt-0.5 text-[10px] md:text-[11px] font-semibold text-slate-500">Total Trip</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-slate-300 whitespace-nowrap">{totalTrips === 0 ? 'Belum ada trip selesai' : `+${totalTrips} selesai`}</p>
           </div>
           <div className="rounded-2xl bg-white p-3.5 md:p-4 shadow-sm ring-1 ring-slate-900/[0.04] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #ECFDF5, #F0FDFA)' }}>??</div>
+            <div className="flex h-8 w-8 md:h-9 md:w-9 items-center justify-center rounded-xl text-base md:text-lg" style={{ background: 'linear-gradient(135deg, #ECFDF5, #F0FDFA)' }}>📍</div>
             <p className="mt-2.5 text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 whitespace-nowrap">{citiesVisited}</p>
             <p className="mt-0.5 text-[10px] md:text-[11px] font-semibold text-slate-500">Kota Dikunjungi</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-slate-300 whitespace-nowrap">{citiesVisited === 0 ? 'Jelajahi Indonesia' : 'Indonesia'}</p>
@@ -593,8 +593,8 @@ function ReviewBottomSheet({ order, existingReview, onClose, onSaved }: {
 
   const headings = [
     `Bagaimana pengalamanmu di ${order.destination_name}?`,
-    `Ceritakan perjalananmu ke ${order.destination_name} ?`,
-    `Gimana seru-nya di ${order.destination_name}? ??`,
+    `Ceritakan perjalananmu ke ${order.destination_name} ✨`,
+    `Gimana seru-nya di ${order.destination_name}? 🎉`,
   ];
   const heading = headings[order.id.charCodeAt(0) % headings.length];
 
@@ -620,7 +620,7 @@ function ReviewBottomSheet({ order, existingReview, onClose, onSaved }: {
             </div>
             <p className="mt-4 text-lg font-bold text-slate-800">Ulasan Terkirim!</p>
             <p className="mt-2 text-sm text-slate-400 leading-relaxed">
-              Terima kasih telah membagikan pengalaman perjalananmu ?
+              Terima kasih telah membagikan pengalaman perjalananmu 🙏
             </p>
           </div>
         ) : (
@@ -658,7 +658,7 @@ function ReviewBottomSheet({ order, existingReview, onClose, onSaved }: {
               />
               <div className="mt-1.5 flex items-center justify-between">
                 <p className={`text-xs ${content.length < 20 ? 'text-slate-300' : 'text-emerald-500'}`}>
-                  {content.length < 20 ? `Minimal ${20 - content.length} karakter lagi` : '? Cukup'}
+                  {content.length < 20 ? `Minimal ${20 - content.length} karakter lagi` : '✓ Cukup'}
                 </p>
                 <p className="text-xs text-slate-300">{content.length}/500</p>
               </div>
